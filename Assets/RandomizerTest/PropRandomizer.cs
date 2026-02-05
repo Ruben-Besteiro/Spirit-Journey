@@ -1,0 +1,21 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PropRandomizer : MonoBehaviour
+{
+    [SerializeField] GameObject[] props;    // El contenido del array de props lo asignamos manualmente según qué queremos que spawnee en cada mapa
+    GameObject[] propSpawnPoints;       // Esto se rellena solo (ver abajo)
+
+    private void Awake()
+    {
+        propSpawnPoints = GameObject.FindGameObjectsWithTag("PropSpawnPoint");
+        print("Se han encontrado " + props.Length + " props y " + propSpawnPoints.Length + " puntos de spawn ");
+
+        foreach(GameObject pt in propSpawnPoints)
+        {
+            int chosenPropIndex = UnityEngine.Random.Range(0, props.Length);
+            Instantiate(props[chosenPropIndex], pt.transform.position, pt.transform.rotation);
+        }
+    }
+}
