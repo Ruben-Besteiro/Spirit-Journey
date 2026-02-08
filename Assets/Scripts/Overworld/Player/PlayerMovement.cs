@@ -5,15 +5,15 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
-    [SerializeField] private float moveSpeed = 6f;
-    [SerializeField] private float jumpHeight = 1.8f;
-    [SerializeField] private float gravity = -9.81f;
-    [SerializeField] private float rotationSpeed = 12f;
+    [SerializeField] protected float moveSpeed = 6f;
+    [SerializeField] protected float jumpHeight = 1.8f;
+    [SerializeField] protected float gravity = -9.81f;
+    [SerializeField] protected float rotationSpeed = 12f;
 
     [Header("References")]
-    [SerializeField] private CharacterController controller;
-    [SerializeField] private Transform cameraTransform;
-    [SerializeField] private Animator animator;
+    [SerializeField] protected CharacterController controller;
+    [SerializeField] protected Transform cameraTransform;
+    [SerializeField] protected Animator animator;
 
     [Header("Ground Check")]
     [SerializeField] private Transform groundCheck;
@@ -24,15 +24,16 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float coyoteTime = 0.15f;
     [SerializeField] private float jumpBufferTime = 0.15f;
 
-    private Vector3 velocity;
+    protected Vector3 velocity;
     private bool isGrounded;
 
-    private float coyoteTimer;
-    private float jumpBufferTimer;
+    protected float coyoteTimer;
+    protected float jumpBufferTimer;
 
-    private Vector2 moveInput;
+    protected Vector2 moveInput;
+    protected Vector3 moveDir;
 
-    private void Awake()
+    protected void Awake()
     {
         if (controller == null)
             controller = GetComponent<CharacterController>();
@@ -61,11 +62,12 @@ public class PlayerMovement : MonoBehaviour
         HandleJump();
         ApplyGravity();
         UpdateAnimator();
+        LateUpdate();       // Esto es necesario por que por alguna razón si no lo pongo el LateUpdate no se llama
     }
 
     /* Movement */
 
-    private void CheckGround()
+    protected void CheckGround()
     {
         isGrounded = Physics.CheckSphere(
             groundCheck.position,
@@ -79,16 +81,19 @@ public class PlayerMovement : MonoBehaviour
 
             if (velocity.y < 0f)
                 velocity.y = -2f;
+
+            velocity.x = 0f;
+            velocity.z = 0f;
         }
     }
 
-    private void UpdateTimers()
+    protected void UpdateTimers()
     {
         coyoteTimer -= Time.deltaTime;
         jumpBufferTimer -= Time.deltaTime;
     }
 
-    private void HandleMovement()
+    protected virtual void HandleMovement()
     {
         Vector3 camForward = cameraTransform.forward;
         Vector3 camRight = cameraTransform.right;
@@ -99,7 +104,7 @@ public class PlayerMovement : MonoBehaviour
         camForward.Normalize();
         camRight.Normalize();
 
-        Vector3 moveDir =
+        moveDir =
             camForward * moveInput.y +
             camRight * moveInput.x;
 
@@ -108,7 +113,7 @@ public class PlayerMovement : MonoBehaviour
         RotateTowardsMovement(moveDir);
     }
 
-    private void RotateTowardsMovement(Vector3 direction)
+    protected virtual void RotateTowardsMovement(Vector3 direction)
     {
         if (direction.sqrMagnitude < 0.001f)
             return;
@@ -122,8 +127,9 @@ public class PlayerMovement : MonoBehaviour
         );
     }
 
-    private void HandleJump()
+    protected virtual void HandleJump()
     {
+        print("Saltando... (clase padre)");
         if (jumpBufferTimer > 0f && coyoteTimer > 0f)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
@@ -135,13 +141,13 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void ApplyGravity()
+    protected virtual void ApplyGravity()
     {
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
     }
 
-    private void UpdateAnimator()
+    protected void UpdateAnimator()
     {
         float speed = moveInput.magnitude;
 
@@ -155,5 +161,10 @@ public class PlayerMovement : MonoBehaviour
         jumpBufferTimer = 0f;
         moveInput = Vector3.zero;
         animator.SetFloat("Speed", 0);
+    }
+
+    protected virtual void LateUpdate()
+    {
+        // Creo un método vacío que pueda sobrescribir en las subclases
     }
 }
