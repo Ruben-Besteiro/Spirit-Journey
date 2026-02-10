@@ -127,6 +127,7 @@ public class PlayerMovement : MonoBehaviour
         // Las paredes se tratan diferente de las rampas y los suelos
         bool isOnASlopeOrGround = Mathf.Abs(playerUp.y) > 0.25f;     // Cuanto más cercano a 1, menos inclinación
 
+        // Si el jugador no es un lagarto, el booleano será verdadero siempre
         if (isOnASlopeOrGround)
         {
             // Hay que recalcular los vectores de movimiento cuando el ángulo de la superficie cambia
@@ -135,7 +136,7 @@ public class PlayerMovement : MonoBehaviour
 
             moveDir = wallForward * moveInput.y + wallRight * moveInput.x;
         }
-        else  // Pared vertical
+        else  // Pared vertical o rampa muy inclinada (lagarto solo)
         {
             // El vector derecha se debe calcular de otra manera
             Vector3 wallRight = Vector3.Cross(wallNormal, Vector3.ProjectOnPlane(Vector3.up, wallNormal)).normalized;
@@ -162,7 +163,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (jumpBufferTimer > 0f && coyoteTimer > 0f)
         {
-            print("Saltando...");
             gravityDirection = Vector3.down;
             transform.rotation = Quaternion.Euler(Vector3.zero);
 
@@ -179,7 +179,6 @@ public class PlayerMovement : MonoBehaviour
     private void ApplyGravity()
     {
         velocity += gravityDirection * Mathf.Abs(gravity) * Time.deltaTime;
-        print(velocity);
         controller.Move(velocity * Time.deltaTime);
     }
 
