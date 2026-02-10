@@ -3,9 +3,13 @@ using UnityEngine.InputSystem;
 
 public class PlayerActions : OverworldObject
 {
+    [Header("Stuff")]
     [SerializeField] private PlayerMovement movement;
     [SerializeField] private Animator animator;
     [SerializeField, Range(0,1)] private float animationPauseSpeed = 0.1f;
+
+    [Header("Bendition")]
+    [SerializeField] public Player_SO bendition;
 
     private InputSystem_Actions input;
     private bool hasControl = true;

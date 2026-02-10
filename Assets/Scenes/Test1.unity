@@ -603,6 +603,7 @@ MonoBehaviour:
   movement: {fileID: 0}
   animator: {fileID: 894190041}
   animationPauseSpeed: 0.1
+  bendition: {fileID: 0}
 --- !u!143 &296426750
 CharacterController:
   m_ObjectHideFlags: 0
@@ -3455,8 +3456,8 @@ GameObject:
   - component: {fileID: 1633955425}
   - component: {fileID: 1633955428}
   - component: {fileID: 1633955429}
-  - component: {fileID: 1633955430}
   - component: {fileID: 1633955431}
+  - component: {fileID: 1633955432}
   m_Layer: 0
   m_Name: Player Lizard
   m_TagString: Player
@@ -3541,36 +3542,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0de1667bb43d1c4f9926c9be340cce9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movement: {fileID: 1633955430}
+  movement: {fileID: 1633955432}
   animator: {fileID: 1327900949}
   animationPauseSpeed: 0.1
---- !u!114 &1633955430
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1633955424}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7af9371984452474890316478a6d0e45, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 6
-  jumpHeight: 5
-  gravity: -15
-  rotationSpeed: 12
-  controller: {fileID: 1633955428}
-  cameraTransform: {fileID: 1375421148}
-  animator: {fileID: 1327900949}
-  groundCheck: {fileID: 1832060221}
-  groundDistance: 0.3
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  coyoteTime: 0.15
-  jumpBufferTime: 0.15
-  modelTransform: {fileID: 605592140}
+  bendition: {fileID: 11400000, guid: 49f5439be6465a84c97b386a0820280f, type: 2}
 --- !u!135 &1633955431
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -3592,6 +3567,32 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.3
   m_Center: {x: 0, y: -1, z: 0}
+--- !u!114 &1633955432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1633955424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48b24051df34cde4482d232c7f97decb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 6
+  jumpHeight: 1.8
+  gravity: -20
+  rotationSpeed: 12
+  controller: {fileID: 1633955428}
+  cameraTransform: {fileID: 1375421148}
+  animator: {fileID: 1327900949}
+  groundCheck: {fileID: 1832060221}
+  groundDistance: 0.3
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 72
+  coyoteTime: 0.15
+  jumpBufferTime: 0.15
 --- !u!1 &1709702032
 GameObject:
   m_ObjectHideFlags: 0

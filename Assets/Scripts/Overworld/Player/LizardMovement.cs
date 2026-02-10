@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class LizardMovement : PlayerMovement
 {
-    Vector3 gravityDirection = Vector3.down;
+    //Vector3 gravityDirection = Vector3.down;
     [SerializeField] Transform modelTransform;
 
-    bool isTouchingWallThisFrame = false;
-    bool wasOnWallLastFrame = false;
-    Coroutine wallExitCoroutine;
-    Vector3 wallNormal;
-
-    private void OnControllerColliderHit(ControllerColliderHit hit)
+    /*private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if (hit.gameObject.CompareTag("ScalableWall"))
         {
@@ -30,6 +25,7 @@ public class LizardMovement : PlayerMovement
 
     protected override void ApplyGravity()
     {
+        base.ApplyGravity();
         // Aplicar gravedad en la dirección personalizada
         if (Mathf.Abs(transform.up.y) > .707f)
         {
@@ -44,7 +40,7 @@ public class LizardMovement : PlayerMovement
 
 
     // No tocar por favor
-    protected override void HandleMovement()
+    /*protected override void HandleMovement()
     {
         Vector3 camForward = cameraTransform.forward;
         Vector3 camRight = cameraTransform.right;
@@ -113,7 +109,6 @@ public class LizardMovement : PlayerMovement
     {
         if (wasOnWallLastFrame && !isTouchingWallThisFrame)
         {
-            Debug.Log("¡Has dejado de tocar la pared!");
             if (wallExitCoroutine != null)
             {
                 StopCoroutine(wallExitCoroutine);
@@ -129,16 +124,5 @@ public class LizardMovement : PlayerMovement
         }
         wasOnWallLastFrame = isTouchingWallThisFrame;
         isTouchingWallThisFrame = false;
-    }
-
-    IEnumerator CheckWallExit()
-    {
-        yield return new WaitForSeconds(0.25f);
-        if (!isTouchingWallThisFrame)
-        {
-            // Reseteamos la gravedad y la rotación del modelo
-            gravityDirection = Vector3.down;
-            transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
-        }
-    }
+    }*/
 }

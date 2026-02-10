@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -33,13 +34,33 @@ public class PlayerMovement : MonoBehaviour
     protected Vector2 moveInput;
     protected Vector3 moveDir;
 
-    protected void Awake()
+    // Cosas del lagarto
+    protected Vector3 gravityDirection = new Vector3(0, -1, 0);
+    protected bool isTouchingWallThisFrame = false;
+    protected bool wasOnWallLastFrame = false;
+    protected Coroutine wallExitCoroutine;
+    protected Vector3 wallNormal;
+
+    Classes playerClass = Classes.Default;
+
+    private void Awake()
     {
         if (controller == null)
             controller = GetComponent<CharacterController>();
 
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
+    }
+
+    private void Start()
+    {
+        if (GetComponent<PlayerActions>().bendition.canClimbWalls)
+        {
+            playerClass = Classes.Lizard;
+            controller.slopeLimit = 90;
+            controller.minMoveDistance = 0;
+            print("El jugador es un lagarto");
+        }
     }
 
     /* Public Input */
@@ -67,7 +88,7 @@ public class PlayerMovement : MonoBehaviour
 
     /* Movement */
 
-    protected void CheckGround()
+    private void CheckGround()
     {
         isGrounded = Physics.CheckSphere(
             groundCheck.position,
@@ -75,65 +96,79 @@ public class PlayerMovement : MonoBehaviour
             groundLayer
         );
 
-        if (isGrounded)
+        if (isGrounded || transform.up != Vector3.up)
         {
             coyoteTimer = coyoteTime;
 
             if (velocity.y < 0f)
                 velocity.y = -2f;
 
-            velocity.x = 0f;
-            velocity.z = 0f;
+            if (!isTouchingWallThisFrame)
+            {
+                velocity.x = 0f;
+                velocity.z = 0f;
+            }
         }
     }
 
-    protected void UpdateTimers()
+    private void UpdateTimers()
     {
         coyoteTimer -= Time.deltaTime;
         jumpBufferTimer -= Time.deltaTime;
     }
 
-    protected virtual void HandleMovement()
+    private void HandleMovement()
     {
         Vector3 camForward = cameraTransform.forward;
         Vector3 camRight = cameraTransform.right;
+        Vector3 moveDir;
+        Vector3 playerUp = transform.up;  // Perpendicular a la pared
 
-        camForward.y = 0f;
-        camRight.y = 0f;
+        // Las paredes se tratan diferente de las rampas y los suelos
+        bool isOnASlopeOrGround = Mathf.Abs(playerUp.y) > 0.25f;     // Cuanto más cercano a 1, menos inclinación
 
-        camForward.Normalize();
-        camRight.Normalize();
+        if (isOnASlopeOrGround)
+        {
+            // Hay que recalcular los vectores de movimiento cuando el ángulo de la superficie cambia
+            Vector3 wallForward = Vector3.ProjectOnPlane(camForward, playerUp).normalized;
+            Vector3 wallRight = Vector3.ProjectOnPlane(camRight, playerUp).normalized;
 
-        moveDir =
-            camForward * moveInput.y +
-            camRight * moveInput.x;
+            moveDir = wallForward * moveInput.y + wallRight * moveInput.x;
+        }
+        else  // Pared vertical
+        {
+            // El vector derecha se debe calcular de otra manera
+            Vector3 wallRight = Vector3.Cross(wallNormal, Vector3.ProjectOnPlane(Vector3.up, wallNormal)).normalized;
+            moveDir = (wallRight * moveInput.x + Vector3.up * moveInput.y).normalized;
+        }
 
         controller.Move(moveDir * moveSpeed * Time.deltaTime);
-
         RotateTowardsMovement(moveDir);
     }
 
-    protected virtual void RotateTowardsMovement(Vector3 direction)
+    private void RotateTowardsMovement(Vector3 direction)
     {
-        if (direction.sqrMagnitude < 0.001f)
-            return;
+        if (direction.sqrMagnitude < 0.001f) return;
 
-        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        Vector3 projectedDirection = Vector3.ProjectOnPlane(direction, transform.up);
 
-        transform.rotation = Quaternion.Slerp(
-            transform.rotation,
-            targetRotation,
-            rotationSpeed * Time.deltaTime
-        );
+        if (projectedDirection.sqrMagnitude < 0.001f) return;
+
+        Quaternion lookRotation = Quaternion.LookRotation(projectedDirection, transform.up);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
     }
 
-    protected virtual void HandleJump()
+    private void HandleJump()
     {
-        print("Saltando... (clase padre)");
         if (jumpBufferTimer > 0f && coyoteTimer > 0f)
         {
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            print("Saltando...");
+            gravityDirection = Vector3.down;
+            transform.rotation = Quaternion.Euler(Vector3.zero);
 
+            velocity = wallNormal * moveSpeed * .5f; // Impulso horizontal
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity); // Impulso vertical
+            animator.SetTrigger("Jump");
             jumpBufferTimer = 0f;
             coyoteTimer = 0f;
 
@@ -141,13 +176,14 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    protected virtual void ApplyGravity()
+    private void ApplyGravity()
     {
-        velocity.y += gravity * Time.deltaTime;
+        velocity += gravityDirection * Mathf.Abs(gravity) * Time.deltaTime;
+        print(velocity);
         controller.Move(velocity * Time.deltaTime);
     }
 
-    protected void UpdateAnimator()
+    private void UpdateAnimator()
     {
         float speed = moveInput.magnitude;
 
@@ -163,8 +199,59 @@ public class PlayerMovement : MonoBehaviour
         animator.SetFloat("Speed", 0);
     }
 
-    protected virtual void LateUpdate()
+    private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        // Creo un método vacío que pueda sobrescribir en las subclases
+        // Si somos un lagarto y tocamos una pared, nos pegamos a ella
+        if (playerClass == Classes.Lizard)
+        {
+            if (hit.gameObject.CompareTag("ScalableWall"))
+            {
+                isTouchingWallThisFrame = true;
+                wallNormal = hit.normal;
+                isGrounded = true;
+
+                // Cambiamos la gravedad y la rotación del modelo
+                gravityDirection = -wallNormal;
+                transform.rotation = Quaternion.FromToRotation(transform.up, wallNormal) * transform.rotation;
+
+                velocity = Vector3.zero;
+            }
+        }
+    }
+
+    private void LateUpdate()
+    {
+        // Esto lo utiliza el lagarto para ver si se despegó de una pared
+        if (playerClass == Classes.Lizard)
+        {
+            if (wasOnWallLastFrame && !isTouchingWallThisFrame)
+            {
+                if (wallExitCoroutine != null)
+                {
+                    StopCoroutine(wallExitCoroutine);
+                }
+                // Aplicamos un retardo para evitar los falsos positivos
+                wallExitCoroutine = StartCoroutine(CheckWallExit());
+            }
+
+            if (isTouchingWallThisFrame && wallExitCoroutine != null)
+            {
+                StopCoroutine(wallExitCoroutine);
+                wallExitCoroutine = null;
+            }
+            wasOnWallLastFrame = isTouchingWallThisFrame;
+            isTouchingWallThisFrame = false;
+        }
+    }
+
+    IEnumerator CheckWallExit()
+    {
+        yield return new WaitForSeconds(0.25f);
+        if (!isTouchingWallThisFrame)
+        {
+            // Reseteamos la gravedad y la rotación del modelo
+            gravityDirection = Vector3.down;
+            transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+        }
     }
 }
