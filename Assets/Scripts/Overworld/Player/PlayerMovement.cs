@@ -6,8 +6,8 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
-    [SerializeField] protected float moveSpeed = 6f;
-    [SerializeField] protected float jumpHeight = 1.8f;
+    [SerializeField] public float moveSpeed = 6f;
+    [SerializeField] public float jumpHeight = 1.8f;
     [SerializeField] protected float gravity = -9.81f;
     [SerializeField] protected float rotationSpeed = 12f;
 
@@ -41,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
     protected Coroutine wallExitCoroutine;
     protected Vector3 wallNormal;
 
-    Classes playerClass = Classes.Default;
+    PlayerActions pa;
 
     private void Awake()
     {
@@ -50,13 +50,14 @@ public class PlayerMovement : MonoBehaviour
 
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
+
+        pa = GetComponent<PlayerActions>();
     }
 
     private void Start()
     {
-        if (GetComponent<PlayerActions>().bendition.canClimbWalls)
+        if (pa.playerClass == Classes.Lizard)
         {
-            playerClass = Classes.Lizard;
             controller.slopeLimit = 90;
             controller.minMoveDistance = 0;
             print("El jugador es un lagarto");
@@ -120,25 +121,27 @@ public class PlayerMovement : MonoBehaviour
     private void HandleMovement()
     {
         Vector3 camForward = cameraTransform.forward;
+        camForward.y = 0;  // Eliminamos la Y para evitar cosas raras
+        camForward.Normalize();
+
         Vector3 camRight = cameraTransform.right;
+        camRight.y = 0;  // Ver arriba
+        camRight.Normalize();
+
         Vector3 moveDir;
-        Vector3 playerUp = transform.up;  // Perpendicular a la pared
+        Vector3 playerUp = transform.up;
 
-        // Las paredes se tratan diferente de las rampas y los suelos
-        bool isOnASlopeOrGround = Mathf.Abs(playerUp.y) > 0.25f;     // Cuanto más cercano a 1, menos inclinación
+        bool isOnASlopeOrGround = Mathf.Abs(playerUp.y) > 0.25f;
 
-        // Si el jugador no es un lagarto, el booleano será verdadero siempre
-        if (isOnASlopeOrGround)
+        if (isOnASlopeOrGround)     // Movimiento normal
         {
-            // Hay que recalcular los vectores de movimiento cuando el ángulo de la superficie cambia
             Vector3 wallForward = Vector3.ProjectOnPlane(camForward, playerUp).normalized;
             Vector3 wallRight = Vector3.ProjectOnPlane(camRight, playerUp).normalized;
 
             moveDir = wallForward * moveInput.y + wallRight * moveInput.x;
         }
-        else  // Pared vertical o rampa muy inclinada (lagarto solo)
+        else  // Movimiento en pared
         {
-            // El vector derecha se debe calcular de otra manera
             Vector3 wallRight = Vector3.Cross(wallNormal, Vector3.ProjectOnPlane(Vector3.up, wallNormal)).normalized;
             moveDir = (wallRight * moveInput.x + Vector3.up * moveInput.y).normalized;
         }
@@ -201,7 +204,7 @@ public class PlayerMovement : MonoBehaviour
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         // Si somos un lagarto y tocamos una pared, nos pegamos a ella
-        if (playerClass == Classes.Lizard)
+        if (pa.playerClass == Classes.Lizard)
         {
             if (hit.gameObject.CompareTag("ScalableWall"))
             {
@@ -221,7 +224,7 @@ public class PlayerMovement : MonoBehaviour
     private void LateUpdate()
     {
         // Esto lo utiliza el lagarto para ver si se despegó de una pared
-        if (playerClass == Classes.Lizard)
+        if (pa.playerClass == Classes.Lizard)
         {
             if (wasOnWallLastFrame && !isTouchingWallThisFrame)
             {

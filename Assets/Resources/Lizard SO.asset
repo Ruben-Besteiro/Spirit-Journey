@@ -10,11 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 011863bb46d044549aa3a7268869c94a, type: 3}
-  m_Name: Default SO
+  m_Name: Lizard SO
   m_EditorClassIdentifier: 
+  benditionName: Lizard
   speed: 6
   hp: 10
   jumpHeight: 5
   attackDamage: 1
   attackCooldown: 1
-  canClimbWalls: 0
+  hasASecondaryAttack: 1
+  canClimbWalls: 1
