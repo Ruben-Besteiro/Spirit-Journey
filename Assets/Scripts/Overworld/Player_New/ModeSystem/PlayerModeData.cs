@@ -6,6 +6,13 @@ public class PlayerModeData : ScriptableObject
     [Header("Stat Modifiers")]
     public float moveSpeedMultiplier = 1f;
     public float jumpForceMultiplier = 1f;
+    internal float staminaDrainPerSecond = 10f;
+
+    [Header("Visual")]
+    public Sprite inactiveSprite;
+    public Sprite activeSprite;
+    public GameObject modelPrefab;
+    public RuntimeAnimatorController animatorOverride;
 
     [Header("Abilities")]
     public bool canWallJump;

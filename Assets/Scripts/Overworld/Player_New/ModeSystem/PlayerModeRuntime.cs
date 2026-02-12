@@ -1,12 +1,30 @@
 public class PlayerModeRuntime
 {
-    private PlayerModeData data;
+    public PlayerModeData data { get; private set; }
     private PlayerController controller;
+    public bool IsActive { get; private set; }
 
     public PlayerModeRuntime(PlayerModeData data, PlayerController controller)
     {
         this.data = data;
         this.controller = controller;
+    }
+
+    public void Activate()
+    {
+        IsActive = true;
+
+        if (data.modelPrefab != null || data.animatorOverride != null)
+        {
+            controller.ApplyVisualOverride(data);
+        }
+    }
+
+    public void Deactivate()
+    {
+        IsActive = false;
+        
+        controller.RestoreDefaultVisual();
     }
 
     public float ModifyMoveSpeed(float baseValue)

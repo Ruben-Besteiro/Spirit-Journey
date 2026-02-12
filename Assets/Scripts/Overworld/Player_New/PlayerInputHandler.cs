@@ -4,11 +4,16 @@ using UnityEngine.InputSystem;
 public class PlayerInputHandler : MonoBehaviour
 {
     [SerializeField] private PlayerController controller;
+    [SerializeField] private PlayerModeManager modeManager;
     private InputSystem_Actions input;
 
     private void Awake()
     {
-        controller = GetComponent<PlayerController>();
+        if (controller == null) 
+            controller = GetComponent<PlayerController>();
+
+        if (modeManager == null)
+            modeManager = GetComponent<PlayerModeManager>();
         
         input = new InputSystem_Actions();
 
@@ -20,6 +25,10 @@ public class PlayerInputHandler : MonoBehaviour
         input.Player.Jump.canceled += ctx => OnJump(ctx);
         input.Player.Attack.started += ctx => OnAttack(ctx);
         input.Player.Attack.canceled += ctx => OnAttack(ctx);
+        input.Player.Pause.started += ctx => OnPause();
+        input.Player.Previous.started += ctx => modeManager.SelectPreviousMode();
+        input.Player.Next.started += ctx => modeManager.SelectPreviousMode();
+        input.Player.Transform.started += ctx => modeManager.ToggleSelectedMode();
     }
     private void OnEnable()
     {
@@ -52,5 +61,14 @@ public class PlayerInputHandler : MonoBehaviour
 
         if (context.canceled)
             controller.AttackPressed = false;
+    }
+
+    private void OnPause()
+    {
+        if (GameManager.Instance.IsPaused)
+        { return; }
+
+        MenuManager.Instance.OpenPauseMenu();
+        GameManager.Instance.PauseGame();
     }
 }

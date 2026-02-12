@@ -15,6 +15,9 @@ public class MoveState : PlayerState
 
         if (controller.AttackPressed)
             stateMachine.ChangeState(new AttackState(stateMachine, controller));
+
+        if (!controller.isGrounded)
+            stateMachine.ChangeState(new FallState(stateMachine, controller));
     }
 
     public override void Update()

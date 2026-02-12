@@ -1,8 +1,9 @@
 using UnityEngine;
 
-public class PlayerStateMachine : MonoBehaviour
+public class PlayerStateMachine : OverworldObject
 {
     private PlayerState currentState;
+    bool active;
 
     public void Initialize(PlayerState startingState)
     {
@@ -19,7 +20,10 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void Update()
     {
-        currentState?.HandleInput();
-        currentState?.Update();
+        if (!isPaused)
+        {
+            currentState?.HandleInput();
+            currentState?.Update();
+        }
     }
 }
