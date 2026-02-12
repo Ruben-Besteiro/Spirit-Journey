@@ -24,7 +24,8 @@ public class PlayerController : OverworldObject
 
     [Header("Visual")]
     [SerializeField] private Transform modelRoot;
-    [SerializeField] private Animator animator;
+    [SerializeField] private Animator defaultAnimator;
+    private Animator animator;
 
     private GameObject currentModelInstance;
 
@@ -63,6 +64,7 @@ public class PlayerController : OverworldObject
             cameraTransform = Camera.main.transform;
 
         defaultModel = modelRoot.GetChild(0).gameObject;
+        animator = defaultAnimator;
         defaultAnimatorController = animator.runtimeAnimatorController;
     }
 
@@ -70,7 +72,7 @@ public class PlayerController : OverworldObject
 
     private void LateUpdate()
     {
-        if (!isPaused)
+        if (!isPaused && animator != null)
         {
             float newMoveSpeed = (MoveInput * moveSpeed).magnitude;
             animator.SetFloat("Speed", newMoveSpeed);
@@ -80,10 +82,16 @@ public class PlayerController : OverworldObject
     }
 
     public void AnimTrigger(string Name)
-    { animator.SetTrigger(Name); }
+    {
+        if (animator != null)
+            animator.SetTrigger(Name); 
+    }
 
     public void AnimBool(string Name, bool state)
-    { animator.SetBool(Name, state); }
+    {
+        if (animator != null)
+            animator.SetBool(Name, state); 
+    }
 
     public void ApplyVisualOverride(PlayerModeData data)
     {
@@ -95,11 +103,8 @@ public class PlayerController : OverworldObject
             defaultModel.SetActive(false);
 
             currentModelInstance = Instantiate(data.modelPrefab, modelRoot);
-        }
 
-        if (data.animatorOverride != null)
-        {
-            animator.runtimeAnimatorController = data.animatorOverride;
+            animator = currentModelInstance.GetComponent<Animator>();
         }
     }
     public void RestoreDefaultVisual()
@@ -109,6 +114,7 @@ public class PlayerController : OverworldObject
 
         defaultModel.SetActive(true);
         animator.runtimeAnimatorController = defaultAnimatorController;
+        animator = defaultAnimator;
     }
 
 

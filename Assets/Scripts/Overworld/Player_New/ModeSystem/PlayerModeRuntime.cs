@@ -14,7 +14,7 @@ public class PlayerModeRuntime
     {
         IsActive = true;
 
-        if (data.modelPrefab != null || data.animatorOverride != null)
+        if (data.modelPrefab != null)
         {
             controller.ApplyVisualOverride(data);
         }

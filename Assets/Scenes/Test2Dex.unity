@@ -128,7 +128,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 93320473}
-  - component: {fileID: 93320474}
   m_Layer: 0
   m_Name: modelRoot
   m_TagString: Untagged
@@ -152,28 +151,6 @@ Transform:
   - {fileID: 605592140}
   m_Father: {fileID: 1633955426}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &93320474
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 93320471}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: fdd6b8d35b2a276448eaff1c7269b4e3, type: 3}
-  m_Controller: {fileID: 9100000, guid: 4267d0549c4ed074f9153cc14d70e826, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &98866553
 GameObject:
   m_ObjectHideFlags: 0
@@ -1496,6 +1473,11 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 2
   m_TargetDisplay: 0
+--- !u!95 &824666169 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 3132301805919095274, guid: 2482510ea9b939946a3f83f706d7c0f6, type: 3}
+  m_PrefabInstance: {fileID: 2932210407142305199}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &957016925
 GameObject:
   m_ObjectHideFlags: 0
@@ -2847,7 +2829,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   modelRoot: {fileID: 93320473}
-  animator: {fileID: 93320474}
+  defaultAnimator: {fileID: 824666169}
   airAcceleration: 20
   gravityAcceleration: 25
   maxFallSpeed: 25

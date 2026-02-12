@@ -12,7 +12,6 @@ public class PlayerModeData : ScriptableObject
     public Sprite inactiveSprite;
     public Sprite activeSprite;
     public GameObject modelPrefab;
-    public RuntimeAnimatorController animatorOverride;
 
     [Header("Abilities")]
     public bool canWallJump;
