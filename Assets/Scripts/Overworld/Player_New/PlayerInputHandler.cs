@@ -17,8 +17,6 @@ public class PlayerInputHandler : MonoBehaviour
         
         input = new InputSystem_Actions();
 
-        Debug.Log(input);
-
         input.Player.Move.performed += ctx => OnMove(ctx.ReadValue<Vector2>());
         input.Player.Move.canceled += ctx => OnMove(Vector2.zero);
         input.Player.Jump.started += ctx => OnJump(ctx);
