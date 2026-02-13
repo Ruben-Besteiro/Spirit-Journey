@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51eeb3cdfb8dc9d4bacfdd664fd5bd0b, type: 3}
+  m_Name: Mode_Lizard
+  m_EditorClassIdentifier: 
+  moveSpeedMultiplier: 1
+  jumpForceMultiplier: 1.5
+  inactiveSprite: {fileID: 21300000, guid: 6e17fec26dfb4f54f976300a96fafcdd, type: 3}
+  activeSprite: {fileID: 21300000, guid: d8ec8404760e5a24f830859cc8ed18fe, type: 3}
+  modelPrefab: {fileID: 3029285362239930315, guid: 8e750348573374546b9ddbc736edd26e, type: 3}
+  animatorOverride: {fileID: 9100000, guid: 4267d0549c4ed074f9153cc14d70e826, type: 2}
+  canWallJump: 0
+  canWallClimb: 1
+  canDoubleJump: 0
+  damageMultiplier: 1

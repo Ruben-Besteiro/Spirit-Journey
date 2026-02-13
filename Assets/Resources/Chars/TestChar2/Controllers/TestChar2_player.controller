@@ -34,7 +34,7 @@ BlendTree:
   m_Name: Blend Tree
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: -203655887218126122, guid: aa1d91406ff8034479c24e043954afca, type: 3}
+    m_Motion: {fileID: -203655887218126122, guid: b60f8a2c873ad9f44867b3c00bcff0e8, type: 3}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -42,7 +42,7 @@ BlendTree:
     m_DirectBlendParameter: Speed
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: -203655887218126122, guid: a150cf0b8848ab0489bdf3d041cf95ca, type: 3}
+    m_Motion: {fileID: -203655887218126122, guid: 6f5015c6158cd594986c619e18af9ea9, type: 3}
     m_Threshold: 3
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -50,7 +50,7 @@ BlendTree:
     m_DirectBlendParameter: Speed
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: -203655887218126122, guid: 466560243ec0c2c428ddbd4c0d9c303a, type: 3}
+    m_Motion: {fileID: -203655887218126122, guid: 79553efafed6f614cbbfde31d3357c84, type: 3}
     m_Threshold: 6
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -232,7 +232,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TestChar_player
+  m_Name: TestChar2_player
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: Jump
@@ -331,7 +331,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TestChar_Fall
+  m_Name: TestChar2_Fall
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -347,7 +347,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -203655887218126122, guid: 118a52f5e3c14b14ebfb2bf25f3759b3, type: 3}
+  m_Motion: {fileID: -203655887218126122, guid: b0c20ee80afbe8546a87ec2353d3245b, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
