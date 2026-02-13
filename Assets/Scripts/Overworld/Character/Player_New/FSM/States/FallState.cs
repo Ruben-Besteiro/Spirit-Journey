@@ -31,9 +31,9 @@ public class FallState : PlayerState
 
     public override void HandleInput()
     {
-        if (controller.damaged > 0)
+        if (controller.damaged.source != null)
         {
-            stateMachine.ChangeState(new HurtState(stateMachine, controller, controller.damaged));
+            stateMachine.ChangeState(new HurtState(stateMachine, controller));
             return;
         }
     }

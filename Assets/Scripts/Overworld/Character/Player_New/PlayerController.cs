@@ -13,7 +13,7 @@ public class PlayerController : OverworldObject
     public float gravity = -20;
     public float maxHP = 2;
     public float currentHP = 2;
-    public float damaged = 0;
+    
     [SerializeField] private float rotationSpeed = 10;
 
     [Header("References")]
@@ -45,10 +45,11 @@ public class PlayerController : OverworldObject
     public LayerMask wallLayer;
     public float wallJumpBackForce = 5f;
 
-    [Header("Combat")] // NUEVA SECCIÓN
-    [SerializeField] private BoxCollider attackBox;
-    private Damageable damageable;
+    [Header("Combat")]
+    [SerializeField] private AttackBox attackBox;
+    [SerializeField] private Damageable damageable;
 
+    [HideInInspector] public DamageInfo damaged;
     [HideInInspector] public bool hasDoubleJumped;
     [HideInInspector] public bool isGrounded;
     [HideInInspector] public Vector3 velocity;
@@ -73,35 +74,36 @@ public class PlayerController : OverworldObject
         animator = defaultAnimator;
         defaultAnimatorController = animator.runtimeAnimatorController;
 
-        // Obtener Damageable y suscribirse
-        damageable = GetComponent<Damageable>();
         if (damageable != null)
-        {
-            damageable.OnDamageReceived.AddListener(OnDamageReceived);
-        }
+        { damageable = GetComponent<Damageable>(); }
+        damageable.OnDamaged += OnDamageReceived;
+
+        if (attackBox != null)
+        {attackBox = GetComponentInChildren<AttackBox>();}
+        attackBox.Setup(gameObject);
 
         // Inicializar HP
         currentHP = maxHP;
 
-        // Asegurar que el attackBox empieza desactivado
         if (attackBox != null)
             attackBox.enabled = false;
+
+        damaged = new DamageInfo(0, null);
+
+        DisableAttackBox();
     }
 
     private void OnDestroy()
     {
-        // Desuscribirse
         if (damageable != null)
-        {
-            damageable.OnDamageReceived.RemoveListener(OnDamageReceived);
-        }
+            damageable.OnDamaged -= OnDamageReceived;
     }
 
     // Método que se llama cuando el Damageable recibe daño
-    private void OnDamageReceived(Vector3 hitDirection, int damage)
+    private void OnDamageReceived(DamageInfo info)
     {
-        damaged += damage; // Acumulamos el daño pendiente
-        Debug.Log($"Player damaged: +{damage}, total damaged: {damaged}");
+        damaged = new DamageInfo(info.amount, info.source); 
+        Debug.Log($"Player damaged: {info.amount}");
     }
 
     // -- Animator --
@@ -299,7 +301,7 @@ public class PlayerController : OverworldObject
 
 
     // Movemos al jugador en la dirección del golpe para evitar softlocks
-    public void Knockback(Vector3 dir, int dmg)
+    public void Knockback(Vector3 dir)
     {
         float knockbackSpeed = 15;
         StartCoroutine(IEKnockback(dir, knockbackSpeed));
@@ -310,32 +312,18 @@ public class PlayerController : OverworldObject
         while (knockbackSpeed > 0)
         {
             yield return null;
-            characterController.Move(dir * Time.deltaTime * knockbackSpeed--);
+            characterController.Move(dir * Time.deltaTime * knockbackSpeed);
+            knockbackSpeed--;
         }
     }
-
-    // Detección de enemigos (es obligatorio que tengan Rigid Body)
-    private void OnTriggerEnter(Collider other)
-    {
-        if (attackBox.enabled)
-        {
-            if (other.gameObject.CompareTag("Enemy"))
-            {
-                Damageable d = other.gameObject.GetComponent<Damageable>();
-                d.ApplyDamage(transform.position - other.transform.position, 1);
-            }
-        }
-    }
-
-
-    // NUEVO: Métodos para activar/desactivar el attackBox desde las animaciones
+    
     public void EnableAttackBox()
     {
-        if (attackBox != null) attackBox.enabled = true;
+        if (attackBox != null) attackBox.gameObject.SetActive(true);
     }
 
     public void DisableAttackBox()
     {
-        if (attackBox != null) attackBox.enabled = false;
+        if (attackBox != null) attackBox.gameObject.SetActive(false);
     }
 }

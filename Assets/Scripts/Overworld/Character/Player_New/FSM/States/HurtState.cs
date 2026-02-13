@@ -4,21 +4,26 @@ public class HurtState : PlayerState
 {
     private float hurtDuration = .5f; // Tiempo que dura el estado de daño
     private float timer;
-    private float totalDamage; // Daño total a aplicar
 
-    public HurtState(PlayerStateMachine stateMachine, PlayerController controller, float damage)
+    public HurtState(PlayerStateMachine stateMachine, PlayerController controller)
         : base(stateMachine, controller)
-    {
-        totalDamage = damage;
-    }
+    { }
 
     public override void Enter()
     {
         // Hacer el daño
-        controller.currentHP -= totalDamage;
+        controller.currentHP -= controller.damaged.amount;
+
+        //Knockback
+        if (controller.damaged.source != null)
+        {
+            Vector3 damageDir = (controller.transform.position - controller.damaged.source.transform.position).normalized;
+            controller.Knockback(damageDir);
+        }
 
         // Restablecer el daño pendiente a 0
-        controller.damaged = 0;
+        controller.damaged = new DamageInfo(0, null);
+
         timer = 0;
     }
 
@@ -35,6 +40,4 @@ public class HurtState : PlayerState
             else stateMachine.ChangeState(new IdleState(stateMachine, controller));
         }
     }
-
-    // No hay HandleInput porque el jugador pierde el control
 }

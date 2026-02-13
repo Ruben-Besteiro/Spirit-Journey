@@ -147,12 +147,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4edbfac2e0bda7439a1fd83eb2447b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mode: 1
-  damageAmount: 1
-  tagSelf: Enemy
-  OnDamageReceived:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!65 &1690465650426901242
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -187,6 +181,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drops: []
+  damageable: {fileID: 931878862571578421}
   moveSpeed: 2
   startFacingRight: 1
   canMove: 1
@@ -200,7 +195,6 @@ MonoBehaviour:
   playerDetectDistance: 20
   damageBox: {fileID: 1690465650426901242}
   maxHealth: 2
-  drawGizmos: 1
 --- !u!54 &487512552319501060
 Rigidbody:
   m_ObjectHideFlags: 0

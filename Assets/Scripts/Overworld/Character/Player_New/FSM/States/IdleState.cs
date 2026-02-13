@@ -1,26 +1,24 @@
 using UnityEngine;
 
-public class MoveState : PlayerState
+public class IdleState : PlayerState
 {
-    public MoveState(PlayerStateMachine stateMachine, PlayerController controller)
+    public IdleState(PlayerStateMachine stateMachine, PlayerController controller)
         : base(stateMachine, controller) { }
 
     public override void Enter()
-    {
-        controller.AnimBool("IsMoving", true);
-    }
+    { }
 
     public override void HandleInput()
     {
-        if (controller.damaged > 0)
+        if (controller.damaged.source != null)
         {
-            stateMachine.ChangeState(new HurtState(stateMachine, controller, controller.damaged));
+            stateMachine.ChangeState(new HurtState(stateMachine, controller));
             return;
         }
 
-        if (controller.MoveInput == Vector2.zero)
+        if (controller.MoveInput != Vector2.zero)
         {
-            stateMachine.ChangeState(new IdleState(stateMachine, controller));
+            stateMachine.ChangeState(new MoveState(stateMachine, controller));
         }
 
         if (controller.JumpPressed && controller.isGrounded)
@@ -36,7 +34,6 @@ public class MoveState : PlayerState
 
     public override void Update()
     {
-        controller.Move();
         controller.ApplyGravity();
     }
 

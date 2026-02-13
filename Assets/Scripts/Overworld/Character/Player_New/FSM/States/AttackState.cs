@@ -11,9 +11,6 @@ public class AttackState : PlayerState
 
     public override void Enter()
     {
-        Debug.Log("Enter AttackState");
-
-        // Resetear el input de ataque para evitar bucles
         controller.AttackPressed = false;
 
         comboStep = 1;
@@ -24,10 +21,10 @@ public class AttackState : PlayerState
 
     public override void HandleInput()
     {
-        if (controller.damaged > 0)
+        if (controller.damaged.source != null)
         {
             controller.DisableAttackBox(); // Desactivar attackBox antes de cambiar a Hurt
-            stateMachine.ChangeState(new HurtState(stateMachine, controller, (int)controller.damaged));
+            stateMachine.ChangeState(new HurtState(stateMachine, controller));
             return;
         }
 

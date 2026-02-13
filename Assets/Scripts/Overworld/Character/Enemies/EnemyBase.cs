@@ -5,6 +5,7 @@ using UnityEngine.AI;
 public class EnemyBase : OverworldObject
 {
     [SerializeField] GameObject[] drops;      // La lista de posibles objetos que el enemigo puede dropear
+    [SerializeField] private Damageable damageable;
 
     [Header("Movement")]
     [SerializeField] protected float moveSpeed = 2f;
@@ -28,7 +29,7 @@ public class EnemyBase : OverworldObject
     [SerializeField] protected int maxHealth = 2;
 
     [Header("Debug")]
-    [SerializeField] private bool drawGizmos = true;
+    //[SerializeField] private bool drawGizmos = true;
 
     protected Transform playerTransform;
     protected CharacterController controller;
@@ -44,6 +45,16 @@ public class EnemyBase : OverworldObject
     {
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         agent = GetComponent<NavMeshAgent>();
+
+        if (damageable == null)
+        { damageable = GetComponent<Damageable>(); }
+        damageable.OnDamaged += TakeDamage;
+    }
+
+    private void OnDestroy()
+    {
+        if (damageable != null)
+            damageable.OnDamaged -= TakeDamage;
     }
 
     void Update()
@@ -72,7 +83,7 @@ public class EnemyBase : OverworldObject
 
     protected virtual void WaitUpdate()
     {
-        Debug.Log("Enemigo esperando para atacar");
+        //Debug.Log("Enemigo esperando para atacar");
 
         Debug.DrawRay(transform.position, vectorToPlayer * playerDetectDistance, Color.red);
         if (Physics.Raycast(transform.position, vectorToPlayer, out hit, playerDetectDistance))
@@ -84,7 +95,7 @@ public class EnemyBase : OverworldObject
             }
             else
             {
-                Debug.Log($"Hit: {hit.collider.name}");
+                //Debug.Log($"Hit: {hit.collider.name}");
             }
         }
         else
@@ -102,7 +113,7 @@ public class EnemyBase : OverworldObject
 
         if (vectorToPlayer.magnitude <= agent.stoppingDistance + .1f)
         {
-            print("Jugador encontrado");
+            //print("Jugador encontrado");
             currentState = EnemyStates.Attack;
         }
 
@@ -111,23 +122,11 @@ public class EnemyBase : OverworldObject
         {
             if (!hit.collider.gameObject.CompareTag("Player") && !hit.collider.gameObject.CompareTag("Enemy"))
             {
-                print("Did Not Hit Player");
+                //print("Did Not Hit Player");
                 agent.isStopped = true;
                 currentState = EnemyStates.Wait;
             }
         }
-    }
-
-    // Esto se llama cuando el Damage Box detecta algo (el enemigo no tiene más triggers)
-    protected virtual void OnTriggerEnter(Collider other)
-    {
-        print("Le diste a algo");
-        Damageable d = other.gameObject.GetComponent<Damageable>();
-        // El enemigo debe estar en estado Chase para hacer daño porque está "cargando" hacia nosotros
-        if (d == null || currentState != EnemyStates.Chase || other.gameObject.CompareTag("Enemy")) return;
-
-        d.ApplyDamage(vectorToPlayer.normalized, 1);
-        currentState = EnemyStates.Attack;
     }
 
     protected virtual void AttackCooldownUpdate()
@@ -147,8 +146,8 @@ public class EnemyBase : OverworldObject
         agent.isStopped = false;
     }
 
-    protected void TakeDamage()
+    protected void TakeDamage(DamageInfo info)
     {
-
+        Debug.Log("Enemy damaged");
     }
 }
