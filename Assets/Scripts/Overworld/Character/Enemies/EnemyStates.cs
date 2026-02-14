@@ -2,5 +2,5 @@ using UnityEngine;
 
 public enum EnemyStates
 {
-    Wait, Chase, Attack, Hurt, Dead
+    Wait, Chase, AttackCooldown, Hurt
 }

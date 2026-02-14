@@ -6,13 +6,13 @@ public class AttackBox : MonoBehaviour
 {
     [Header("Damage")]
     public GameObject source;
-    public float damage = 10f;
+    public float damage = 1;
 
     [Header("Tag Filter")]
     public List<string> invalidTags = new();
 
     [Header("Debug")]
-    public bool debugHits;
+    public bool debugHits = true;
 
     private void Reset()
     {
@@ -39,6 +39,7 @@ public class AttackBox : MonoBehaviour
     {
         if (invalidTags == null || invalidTags.Count == 0)
             return true;
+        //if (other.gameObject.name.StartsWith("Enemy")) return true;
 
         foreach (var tag in invalidTags)
         {

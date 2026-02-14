@@ -54,6 +54,7 @@ public class PlayerController : OverworldObject
     [HideInInspector] public bool isGrounded;
     [HideInInspector] public Vector3 velocity;
     private Vector3 currentWallNormal;
+    public bool hasTakenDamageThisFrame = false;
 
     public Vector2 MoveInput { get; set; }
     public bool JumpPressed { get; set; }
@@ -82,6 +83,10 @@ public class PlayerController : OverworldObject
         {attackBox = GetComponentInChildren<AttackBox>();}
         attackBox.Setup(gameObject);
 
+        if (damageable == null)
+        { damageable = GetComponent<Damageable>(); }
+        damageable.OnDamaged += TakeDamage;
+
         // Inicializar HP
         currentHP = maxHP;
 
@@ -99,8 +104,7 @@ public class PlayerController : OverworldObject
             damageable.OnDamaged -= OnDamageReceived;
     }
 
-    // Método que se llama cuando el Damageable recibe daño
-    private void OnDamageReceived(DamageInfo info)
+    public void OnDamageReceived(DamageInfo info)
     {
         damaged = new DamageInfo(info.amount, info.source); 
         Debug.Log($"Player damaged: {info.amount}");
@@ -116,6 +120,7 @@ public class PlayerController : OverworldObject
             isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundLayer);
             animator.SetBool("IsGrounded", isGrounded);
         }
+        hasTakenDamageThisFrame = false;
     }
 
     public void AnimTrigger(string Name)
@@ -289,6 +294,22 @@ public class PlayerController : OverworldObject
         characterController.Move(wallMoveDirection * finalSpeed * Time.deltaTime);
     }
 
+    public void TakeDamage(DamageInfo info)
+    {
+        if (hasTakenDamageThisFrame) return;
+        hasTakenDamageThisFrame = true;
+
+        //Knockback
+        if (damaged.source != null)
+        {
+            // Hacer el daño
+            currentHP -= damaged.amount;
+            Debug.Log("Player damaged " + currentHP);
+            Vector3 damageDir = (transform.position - damaged.source.transform.position).normalized;
+            Knockback(damageDir);
+        }
+    }
+
     //-- Pausa --
     protected override void OnGamePaused()
     {
@@ -303,7 +324,7 @@ public class PlayerController : OverworldObject
     // Movemos al jugador en la dirección del golpe para evitar softlocks
     public void Knockback(Vector3 dir)
     {
-        float knockbackSpeed = 15;
+        float knockbackSpeed = 25;
         StartCoroutine(IEKnockback(dir, knockbackSpeed));
     }
 

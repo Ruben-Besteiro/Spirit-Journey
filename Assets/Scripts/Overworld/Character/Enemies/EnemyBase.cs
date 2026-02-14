@@ -4,13 +4,10 @@ using UnityEngine.AI;
 
 public class EnemyBase : OverworldObject
 {
-    [SerializeField] GameObject[] drops;      // La lista de posibles objetos que el enemigo puede dropear
     [SerializeField] private Damageable damageable;
 
     [Header("Movement")]
     [SerializeField] protected float moveSpeed = 2f;
-    [SerializeField] protected bool startFacingRight = true;
-    public bool canMove = true;
     Vector3 vectorToPlayer;
     protected Coroutine attackCoroutine;
 
@@ -19,36 +16,37 @@ public class EnemyBase : OverworldObject
 
     [Header("Detection")]
     [SerializeField] protected LayerMask groundMask;
-    [SerializeField] protected float forwardCheckDistance = 0.2f;
-    [SerializeField] protected float edgeCheckDistance = 0.4f;
-    [SerializeField] protected float skinWidth = 0.02f;
     [SerializeField] protected float playerDetectDistance = 20;
-    [SerializeField] protected BoxCollider damageBox;
 
     [Header("Health")]
-    [SerializeField] protected int maxHealth = 2;
-
-    [Header("Debug")]
-    //[SerializeField] private bool drawGizmos = true;
+    [SerializeField] protected float maxHP = 2;
+    protected float currentHP;
 
     protected Transform playerTransform;
     protected CharacterController controller;
     protected EnemyStates currentState = EnemyStates.Wait;
-    protected int currentHealth;
     protected Vector3 velocity;
-    protected bool grounded;
-    protected bool groundedPrev;
     RaycastHit hit;
-    NavMeshAgent agent;
+    protected NavMeshAgent agent;
+    DamageInfo damaged;
+    [SerializeField] protected BoxCollider damageBox;
+
+    public bool hasTakenDamageThisFrame = false;
 
     void Awake()
     {
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         agent = GetComponent<NavMeshAgent>();
 
+        if (damageable != null)
+        { damageable = GetComponent<Damageable>(); }
+        damageable.OnDamaged += OnDamageReceived;
+
         if (damageable == null)
         { damageable = GetComponent<Damageable>(); }
         damageable.OnDamaged += TakeDamage;
+
+        currentHP = maxHP;
     }
 
     private void OnDestroy()
@@ -57,9 +55,15 @@ public class EnemyBase : OverworldObject
             damageable.OnDamaged -= TakeDamage;
     }
 
+    public void OnDamageReceived(DamageInfo info)
+    {
+        damaged = new DamageInfo(info.amount, info.source);
+        Debug.Log($"Enemy damaged: {info.amount}");
+    }
+
     void Update()
     {
-        if (isPaused)
+        if (isPaused && agent.enabled)
         {
             if (agent != null && !agent.isStopped) agent.isStopped = true;
             return;
@@ -75,32 +79,27 @@ public class EnemyBase : OverworldObject
             case EnemyStates.Chase:
                 ChaseUpdate();
                 break;
-            case EnemyStates.Attack:
+            case EnemyStates.AttackCooldown:
                 AttackCooldownUpdate();
                 break;
         }
     }
 
+    private void LateUpdate()
+    {
+        hasTakenDamageThisFrame = false;
+    }
+
     protected virtual void WaitUpdate()
     {
-        //Debug.Log("Enemigo esperando para atacar");
-
         Debug.DrawRay(transform.position, vectorToPlayer * playerDetectDistance, Color.red);
         if (Physics.Raycast(transform.position, vectorToPlayer, out hit, playerDetectDistance))
         {
             if (hit.collider.CompareTag("Player"))
             {
-                Debug.Log("Hit Player!");
+                Debug.Log("Jugador encontrado");
                 currentState = EnemyStates.Chase;
             }
-            else
-            {
-                //Debug.Log($"Hit: {hit.collider.name}");
-            }
-        }
-        else
-        {
-            Debug.Log("No hit");
         }
     }
 
@@ -113,8 +112,7 @@ public class EnemyBase : OverworldObject
 
         if (vectorToPlayer.magnitude <= agent.stoppingDistance + .1f)
         {
-            //print("Jugador encontrado");
-            currentState = EnemyStates.Attack;
+            currentState = EnemyStates.AttackCooldown;
         }
 
         Debug.DrawRay(transform.position, vectorToPlayer * hit.distance, Color.red);
@@ -122,7 +120,6 @@ public class EnemyBase : OverworldObject
         {
             if (!hit.collider.gameObject.CompareTag("Player") && !hit.collider.gameObject.CompareTag("Enemy"))
             {
-                //print("Did Not Hit Player");
                 agent.isStopped = true;
                 currentState = EnemyStates.Wait;
             }
@@ -135,19 +132,57 @@ public class EnemyBase : OverworldObject
         attackCoroutine = StartCoroutine(IEAttackCooldown());
     }
 
-    protected IEnumerator IEAttackCooldown()
+    protected virtual IEnumerator IEAttackCooldown()
     {
-        agent.isStopped = true;
+        if (agent.enabled) agent.isStopped = true;
         damageBox.enabled = false;
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(2);
         attackCoroutine = null;
         currentState = EnemyStates.Chase;
         damageBox.enabled = true;
-        agent.isStopped = false;
+        if (agent.enabled) agent.isStopped = false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            if (!other.gameObject.GetComponent<PlayerController>().hasTakenDamageThisFrame)
+            {
+                other.gameObject.GetComponent<Damageable>().TakeDamage(new DamageInfo(1, gameObject));
+            }
+            currentState = EnemyStates.AttackCooldown;
+        }
     }
 
     protected void TakeDamage(DamageInfo info)
     {
-        Debug.Log("Enemy damaged");
+        if (hasTakenDamageThisFrame) return;
+        hasTakenDamageThisFrame = true;
+        if (damaged.source == null || damaged.source.gameObject.CompareTag("Enemy")) return;
+
+        // Hacer el daño
+        currentHP -= damaged.amount;
+        //Debug.Log("Enemy damaged by " + info.source.name + " -> " + currentHP + " remaining");
+
+        if (currentHP <= 0) Destroy(gameObject);
+        else
+        {
+            Vector3 damageDir = (transform.position - damaged.source.transform.position).normalized;
+            StartCoroutine(IEKnockback(damageDir));
+        }
+    }
+
+    private IEnumerator IEKnockback(Vector3 dir)
+    {
+        NavMeshAgent agent = GetComponent<NavMeshAgent>();
+        float knockbackSpeed = 15f;
+
+        while (knockbackSpeed > 0)
+        {
+            agent.Move(dir * Time.deltaTime * knockbackSpeed);
+            knockbackSpeed -= Time.deltaTime * 30f;
+            yield return null;
+        }
     }
 }

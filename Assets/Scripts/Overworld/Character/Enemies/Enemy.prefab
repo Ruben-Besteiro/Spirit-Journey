@@ -1,5 +1,58 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3949239720330596836
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7743596336261479240}
+  - component: {fileID: 2598597334535170179}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7743596336261479240
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3949239720330596836}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.012499809}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3659124035828447554}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2598597334535170179
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3949239720330596836}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 1
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2, y: 2, z: 0.25}
+  m_Center: {x: 0, y: 0, z: 0.8}
 --- !u!1 &5461994548723159906
 GameObject:
   m_ObjectHideFlags: 0
@@ -14,9 +67,9 @@ GameObject:
   - component: {fileID: 5136125269476739721}
   - component: {fileID: 7801167769170505953}
   - component: {fileID: 931878862571578421}
-  - component: {fileID: 1690465650426901242}
   - component: {fileID: 1094708299007710522}
   - component: {fileID: 487512552319501060}
+  - component: {fileID: 1373268767648008373}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -36,7 +89,8 @@ Transform:
   m_LocalPosition: {x: 17.53, y: 6.84, z: 17.75}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_Children:
+  - {fileID: 7743596336261479240}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6124109873405817861
@@ -147,27 +201,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4edbfac2e0bda7439a1fd83eb2447b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!65 &1690465650426901242
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5461994548723159906}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 1
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 0.25}
-  m_Center: {x: 0, y: 0, z: 0.4}
 --- !u!114 &1094708299007710522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,8 +226,8 @@ MonoBehaviour:
   edgeCheckDistance: 0.4
   skinWidth: 0.02
   playerDetectDistance: 20
-  damageBox: {fileID: 1690465650426901242}
-  maxHealth: 2
+  maxHP: 4
+  damageBox: {fileID: 1373268767648008373}
 --- !u!54 &487512552319501060
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -222,3 +255,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &1373268767648008373
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5461994548723159906}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 1
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 0.25}
+  m_Center: {x: 0, y: 0, z: 0.4}

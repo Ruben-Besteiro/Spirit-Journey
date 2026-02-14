@@ -22,5 +22,3 @@ public struct DamageInfo
         this.source = source;
     }
 }
-
-
