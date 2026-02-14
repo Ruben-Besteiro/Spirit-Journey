@@ -29,6 +29,15 @@ public class FallState : PlayerState
         HandleAirAbilities();
     }
 
+    public override void HandleInput()
+    {
+        if (controller.damaged.source != null)
+        {
+            stateMachine.ChangeState(new HurtState(stateMachine, controller));
+            return;
+        }
+    }
+
     private void HandleAirAbilities()
     {
         if (controller.JumpPressed)

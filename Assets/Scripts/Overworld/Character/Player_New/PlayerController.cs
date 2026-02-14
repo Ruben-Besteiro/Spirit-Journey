@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -7,10 +8,13 @@ using UnityEngine.EventSystems;
 public class PlayerController : OverworldObject
 {
     [Header("Stats")]
-    public float moveSpeed = 5f;
-    public float jumpForce = 8f;
-    public float gravity = -20f;
-    [SerializeField] private float rotationSpeed = 10f;
+    public float moveSpeed = 5;
+    public float jumpForce = 8;
+    public float gravity = -20;
+    public float maxHP = 2;
+    public float currentHP = 2;
+    
+    [SerializeField] private float rotationSpeed = 10;
 
     [Header("References")]
     [SerializeField] private CharacterController characterController;
@@ -28,10 +32,8 @@ public class PlayerController : OverworldObject
     private Animator animator;
 
     private GameObject currentModelInstance;
-
     private GameObject defaultModel;
     private RuntimeAnimatorController defaultAnimatorController;
-
 
     [Header("Air Control")]
     public float airAcceleration = 20f;
@@ -43,10 +45,16 @@ public class PlayerController : OverworldObject
     public LayerMask wallLayer;
     public float wallJumpBackForce = 5f;
 
+    [Header("Combat")]
+    [SerializeField] private AttackBox attackBox;
+    [SerializeField] private Damageable damageable;
+
+    [HideInInspector] public DamageInfo damaged;
     [HideInInspector] public bool hasDoubleJumped;
     [HideInInspector] public bool isGrounded;
     [HideInInspector] public Vector3 velocity;
     private Vector3 currentWallNormal;
+    public bool hasTakenDamageThisFrame = false;
 
     public Vector2 MoveInput { get; set; }
     public bool JumpPressed { get; set; }
@@ -66,10 +74,43 @@ public class PlayerController : OverworldObject
         defaultModel = modelRoot.GetChild(0).gameObject;
         animator = defaultAnimator;
         defaultAnimatorController = animator.runtimeAnimatorController;
+
+        if (damageable != null)
+        { damageable = GetComponent<Damageable>(); }
+        damageable.OnDamaged += OnDamageReceived;
+
+        if (attackBox != null)
+        {attackBox = GetComponentInChildren<AttackBox>();}
+        attackBox.Setup(gameObject);
+
+        if (damageable == null)
+        { damageable = GetComponent<Damageable>(); }
+        damageable.OnDamaged += TakeDamage;
+
+        // Inicializar HP
+        currentHP = maxHP;
+
+        if (attackBox != null)
+            attackBox.enabled = false;
+
+        damaged = new DamageInfo(0, null);
+
+        DisableAttackBox();
+    }
+
+    private void OnDestroy()
+    {
+        if (damageable != null)
+            damageable.OnDamaged -= OnDamageReceived;
+    }
+
+    public void OnDamageReceived(DamageInfo info)
+    {
+        damaged = new DamageInfo(info.amount, info.source); 
+        Debug.Log($"Player damaged: {info.amount}");
     }
 
     // -- Animator --
-
     private void LateUpdate()
     {
         if (!isPaused && animator != null)
@@ -79,18 +120,19 @@ public class PlayerController : OverworldObject
             isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundLayer);
             animator.SetBool("IsGrounded", isGrounded);
         }
+        hasTakenDamageThisFrame = false;
     }
 
     public void AnimTrigger(string Name)
     {
         if (animator != null)
-            animator.SetTrigger(Name); 
+            animator.SetTrigger(Name);
     }
 
     public void AnimBool(string Name, bool state)
     {
         if (animator != null)
-            animator.SetBool(Name, state); 
+            animator.SetBool(Name, state);
     }
 
     public void ApplyVisualOverride(PlayerModeData data)
@@ -117,7 +159,6 @@ public class PlayerController : OverworldObject
         animator = defaultAnimator;
     }
 
-
     // -- Funciones de control --
     public void Move()
     {
@@ -127,7 +168,6 @@ public class PlayerController : OverworldObject
             velocity.z = Mathf.Lerp(velocity.z, 0, 0.5f);
             return;
         }
-            
 
         float finalSpeed = modeManager.ModifyMoveSpeed(moveSpeed);
 
@@ -178,18 +218,25 @@ public class PlayerController : OverworldObject
 
     public bool CheckWall(out RaycastHit hit)
     {
+        hit = new RaycastHit();
         Vector3 origin = transform.position + Vector3.up * 1f;
 
         if (Physics.SphereCast(
             origin,
             0.3f,
             transform.forward,
-            out hit,
+            out RaycastHit frontHit,
             wallCheckDistance,
             wallLayer))
         {
-            currentWallNormal = hit.normal;
-            return true;
+            float angle = Vector3.Angle(Vector3.up, frontHit.normal);
+            if (angle > 45)
+            {
+                hit = frontHit;
+                currentWallNormal = frontHit.normal;
+                Debug.Log($"Pared frontal: {frontHit.collider.name}, ángulo: {angle:F1}°");
+                return true;
+            }
         }
 
         return false;
@@ -214,7 +261,6 @@ public class PlayerController : OverworldObject
 
     public void ResetFallSpeed()
     { velocity.y = 0; }
-
 
     public void Jump()
     {
@@ -248,6 +294,22 @@ public class PlayerController : OverworldObject
         characterController.Move(wallMoveDirection * finalSpeed * Time.deltaTime);
     }
 
+    public void TakeDamage(DamageInfo info)
+    {
+        if (hasTakenDamageThisFrame) return;
+        hasTakenDamageThisFrame = true;
+
+        //Knockback
+        if (damaged.source != null)
+        {
+            // Hacer el daño
+            currentHP -= damaged.amount;
+            Debug.Log("Player damaged " + currentHP);
+            Vector3 damageDir = (transform.position - damaged.source.transform.position).normalized;
+            Knockback(damageDir);
+        }
+    }
+
     //-- Pausa --
     protected override void OnGamePaused()
     {
@@ -256,5 +318,33 @@ public class PlayerController : OverworldObject
     protected override void OnGameResumed()
     {
         animator.speed = 1;
+    }
+
+
+    // Movemos al jugador en la dirección del golpe para evitar softlocks
+    public void Knockback(Vector3 dir)
+    {
+        float knockbackSpeed = 25;
+        StartCoroutine(IEKnockback(dir, knockbackSpeed));
+    }
+
+    private IEnumerator IEKnockback(Vector3 dir, float knockbackSpeed)
+    {
+        while (knockbackSpeed > 0)
+        {
+            yield return null;
+            characterController.Move(dir * Time.deltaTime * knockbackSpeed);
+            knockbackSpeed--;
+        }
+    }
+    
+    public void EnableAttackBox()
+    {
+        if (attackBox != null) attackBox.gameObject.SetActive(true);
+    }
+
+    public void DisableAttackBox()
+    {
+        if (attackBox != null) attackBox.gameObject.SetActive(false);
     }
 }

@@ -8,19 +8,15 @@ public class GameManager : MonoBehaviour
     public static event Action OnGamePaused;
     public static event Action OnGameResumed;
 
-    private bool isPaused;
+    private bool isPaused = false;
 
     public bool IsPaused => isPaused;
 
     private void Awake()
     {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
 
-        Instance = this;
         DontDestroyOnLoad(gameObject);
     }
 

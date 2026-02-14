@@ -11,12 +11,23 @@ public class AttackState : PlayerState
 
     public override void Enter()
     {
+        controller.AttackPressed = false;
+
         comboStep = 1;
         PlayAttack(comboStep);
+
+        controller.EnableAttackBox();
     }
 
     public override void HandleInput()
     {
+        if (controller.damaged.source != null)
+        {
+            controller.DisableAttackBox(); // Desactivar attackBox antes de cambiar a Hurt
+            stateMachine.ChangeState(new HurtState(stateMachine, controller));
+            return;
+        }
+
         if (controller.AttackPressed && comboStep < 3)
         {
             comboStep++;
@@ -31,6 +42,7 @@ public class AttackState : PlayerState
 
         if (comboTimer >= comboWindow)
         {
+            controller.DisableAttackBox();
             stateMachine.ChangeState(new IdleState(stateMachine, controller));
         }
     }
@@ -38,6 +50,15 @@ public class AttackState : PlayerState
     private void PlayAttack(int step)
     {
         Debug.Log("Attack " + step);
+
+        controller.AnimTrigger("Attack" + step);
+
         comboTimer = 0;
+    }
+
+    public override void Exit()
+    {
+        // Asegurarse de que la attackBox queda desactivada al salir
+        controller.DisableAttackBox();
     }
 }
