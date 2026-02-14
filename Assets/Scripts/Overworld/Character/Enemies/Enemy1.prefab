@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7743596336261479240}
   - component: {fileID: 2598597334535170179}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Damage Box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69,7 +69,7 @@ GameObject:
   - component: {fileID: 1094708299007710522}
   - component: {fileID: 487512552319501060}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: Enemy1
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -191,7 +191,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageable: {fileID: 931878862571578421}
-  moveSpeed: 2
   animator: {fileID: 0}
   groundMask:
     serializedVersion: 2

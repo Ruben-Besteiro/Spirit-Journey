@@ -2,13 +2,12 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyBase : OverworldObject
+public class Enemy1 : OverworldObject
 {
     [SerializeField] private Damageable damageable;
 
     [Header("Movement")]
-    [SerializeField] protected float moveSpeed = 2f;
-    Vector3 vectorToPlayer;
+    protected Vector3 vectorToPlayer;
     protected Coroutine attackCoroutine;
 
     [Header("Animation")]
@@ -16,7 +15,7 @@ public class EnemyBase : OverworldObject
 
     [Header("Detection")]
     [SerializeField] protected LayerMask groundMask;
-    [SerializeField] protected float playerDetectDistance = 999999999999;
+    [SerializeField] protected float playerDetectDistance = 20;
 
     [Header("Health")]
     [SerializeField] protected float maxHP = 2;
@@ -25,7 +24,6 @@ public class EnemyBase : OverworldObject
     protected Transform playerTransform;
     protected CharacterController controller;
     protected EnemyStates currentState = EnemyStates.Wait;
-    protected Vector3 velocity;
     RaycastHit hit;
     protected NavMeshAgent agent;
     DamageInfo damaged;
@@ -61,9 +59,8 @@ public class EnemyBase : OverworldObject
         Debug.Log($"Enemy damaged: {info.amount}");
     }
 
-    void Update()
+    protected virtual void Update()
     {
-        print(agent.isStopped + " " + currentState);
         if (isPaused && agent.enabled)
         {
             if (agent != null && !agent.isStopped) agent.isStopped = true;
@@ -81,7 +78,7 @@ public class EnemyBase : OverworldObject
                 ChaseUpdate();
                 break;
             case EnemyStates.AttackCooldown:
-                AttackCooldownUpdate();
+                AttackUpdate();
                 break;
         }
     }
@@ -153,13 +150,13 @@ public class EnemyBase : OverworldObject
         }
     }
 
-    protected virtual void AttackCooldownUpdate()
+    protected virtual void AttackUpdate()
     {
         if (attackCoroutine != null) return;
         attackCoroutine = StartCoroutine(IEAttackCooldown());
     }
 
-    protected virtual IEnumerator IEAttackCooldown()
+    private IEnumerator IEAttackCooldown()
     {
         if (agent.enabled) agent.isStopped = true;
         damageBox.enabled = false;
@@ -175,9 +172,7 @@ public class EnemyBase : OverworldObject
         if (other.gameObject.CompareTag("Player"))
         {
             if (!other.gameObject.GetComponent<PlayerController>().hasTakenDamageThisFrame)
-            {
                 other.gameObject.GetComponent<Damageable>().TakeDamage(new DamageInfo(1, gameObject));
-            }
             currentState = EnemyStates.AttackCooldown;
         }
     }

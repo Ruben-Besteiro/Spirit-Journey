@@ -306,7 +306,7 @@ public class PlayerController : OverworldObject
             currentHP -= damaged.amount;
             Debug.Log("Player damaged " + currentHP);
             Vector3 damageDir = (transform.position - damaged.source.transform.position).normalized;
-            Knockback(damageDir);
+            if (!damaged.source.gameObject.CompareTag("Bullet")) Knockback(damageDir);
         }
     }
 

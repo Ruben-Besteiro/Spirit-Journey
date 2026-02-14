@@ -8,6 +8,7 @@ TagManager:
   - PropPrefab
   - ScalableWall
   - Enemy
+  - Bullet
   layers:
   - Default
   - TransparentFX

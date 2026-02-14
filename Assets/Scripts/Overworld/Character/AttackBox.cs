@@ -21,6 +21,7 @@ public class AttackBox : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        print("Attack Box detectó " + other.gameObject.name);
         if (!IsValidTarget(other))
             return;
 
@@ -31,15 +32,11 @@ public class AttackBox : MonoBehaviour
 
         DamageInfo info = new DamageInfo(damage, source);
         dmg.TakeDamage(info);
-
-        if (debugHits)
-            Debug.Log($"{name} hit {other.name} for {damage}");
     }
     private bool IsValidTarget(Collider other)
     {
         if (invalidTags == null || invalidTags.Count == 0)
             return true;
-        //if (other.gameObject.name.StartsWith("Enemy")) return true;
 
         foreach (var tag in invalidTags)
         {
