@@ -16,7 +16,7 @@ public class EnemyBase : OverworldObject
 
     [Header("Detection")]
     [SerializeField] protected LayerMask groundMask;
-    [SerializeField] protected float playerDetectDistance = 20;
+    [SerializeField] protected float playerDetectDistance = 999999999999;
 
     [Header("Health")]
     [SerializeField] protected float maxHP = 2;
@@ -63,6 +63,7 @@ public class EnemyBase : OverworldObject
 
     void Update()
     {
+        print(agent.isStopped + " " + currentState);
         if (isPaused && agent.enabled)
         {
             if (agent != null && !agent.isStopped) agent.isStopped = true;
@@ -92,17 +93,35 @@ public class EnemyBase : OverworldObject
 
     protected virtual void WaitUpdate()
     {
-        Debug.DrawRay(transform.position, vectorToPlayer * playerDetectDistance, Color.red);
-        if (Physics.Raycast(transform.position, vectorToPlayer, out hit, playerDetectDistance))
+        agent.isStopped = true;
+
+        RaycastHit[] hits = Physics.RaycastAll(transform.position, vectorToPlayer.normalized, playerDetectDistance);
+
+        // Ordenar por distancia por si acaso
+        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+        foreach (RaycastHit h in hits)
         {
+            // El raycast coge el primer objeto que no sea del propio enemigo
+            if (h.collider.transform.root == transform.root) continue;
+
+            hit = h;
+
             if (hit.collider.CompareTag("Player"))
             {
                 Debug.Log("Jugador encontrado");
+                Debug.DrawRay(transform.position, vectorToPlayer.normalized * playerDetectDistance, Color.green);
                 currentState = EnemyStates.Chase;
             }
+            else
+            {
+                print("Se encontró " + hit.collider.gameObject.name);
+                Debug.DrawRay(transform.position, vectorToPlayer.normalized * playerDetectDistance, Color.red);
+            }
+
+            break;
         }
     }
-
 
     protected virtual void ChaseUpdate()
     {
@@ -113,16 +132,24 @@ public class EnemyBase : OverworldObject
         if (vectorToPlayer.magnitude <= agent.stoppingDistance + .1f)
         {
             currentState = EnemyStates.AttackCooldown;
+            return;
         }
 
-        Debug.DrawRay(transform.position, vectorToPlayer * hit.distance, Color.red);
-        if (Physics.Raycast(transform.position, vectorToPlayer, out hit, playerDetectDistance))
+        RaycastHit[] hits = Physics.RaycastAll(transform.position, vectorToPlayer.normalized, playerDetectDistance);
+        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+        foreach (RaycastHit h in hits)
         {
-            if (!hit.collider.gameObject.CompareTag("Player") && !hit.collider.gameObject.CompareTag("Enemy"))
+            if (h.collider.transform.root == transform.root) continue;
+
+            Debug.DrawRay(transform.position, vectorToPlayer.normalized * h.distance, Color.red);
+
+            if (!h.collider.gameObject.CompareTag("Player") && !h.collider.gameObject.CompareTag("Enemy"))
             {
-                agent.isStopped = true;
                 currentState = EnemyStates.Wait;
             }
+
+            break;
         }
     }
 

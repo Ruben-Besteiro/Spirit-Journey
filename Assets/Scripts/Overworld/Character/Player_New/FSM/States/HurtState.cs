@@ -26,10 +26,7 @@ public class HurtState : PlayerState
         // Esperar a que termine el tiempo de hurt para decidir si matar al jugador o devolverle el control
         if (timer >= hurtDuration)
         {
-            if (controller.currentHP <= 0 && timer >= hurtDuration)
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            }
+            if (controller.currentHP <= 0 && timer >= hurtDuration) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             else stateMachine.ChangeState(new IdleState(stateMachine, controller));
         }
     }
