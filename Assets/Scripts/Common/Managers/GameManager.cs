@@ -1,5 +1,8 @@
 using UnityEngine;
 using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -7,6 +10,10 @@ public class GameManager : MonoBehaviour
 
     public static event Action OnGamePaused;
     public static event Action OnGameResumed;
+
+    private string rutaCompleta;
+    private SaveData data;
+    private List<ISaveable> saveableObjects;
 
     private bool isPaused = false;
 
@@ -18,6 +25,29 @@ public class GameManager : MonoBehaviour
         else Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
+
+        // Configurar la ruta
+        rutaCompleta = Path.Combine(Application.persistentDataPath, "SaveData.sav");
+
+        // Por si no existe
+        try
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(rutaCompleta));
+        }
+        catch (Exception)
+        {
+            // Si no se tiene permisos para crear la carpeta entonces se juega sin guardar y ya está
+        }
+    }
+
+    private void Start()
+    {
+        data = TryLoad();
+        saveableObjects = FindAllSaveableObjects();
+        foreach (ISaveable obj in saveableObjects)
+        {
+            obj.LoadData(data);
+        }
     }
 
     /* PAUSE SYSTEM */
@@ -48,5 +78,80 @@ public class GameManager : MonoBehaviour
         else
             PauseGame();
     }
-}
 
+    private List<ISaveable> FindAllSaveableObjects()
+    {
+        var foundSaveableObjects = FindObjectsByType(
+            typeof(MonoBehaviour),
+            FindObjectsInactive.Include,
+            FindObjectsSortMode.None
+        ).OfType<ISaveable>();
+
+        return new List<ISaveable>(foundSaveableObjects);
+    }
+
+    public void TrySave()
+    {
+        if (data == null)
+        {
+            data = new SaveData();
+        }
+
+        saveableObjects = FindAllSaveableObjects();
+
+        foreach (ISaveable obj in saveableObjects)
+        {
+            string objectName = (obj as MonoBehaviour)?.gameObject.name ?? "Unknown";
+            obj.SaveData(data);
+        }
+
+        try
+        {
+            string json = JsonUtility.ToJson(data, true);
+
+            using (FileStream stream = new FileStream(rutaCompleta, FileMode.Create))
+            {
+                using (StreamWriter write = new StreamWriter(stream))
+                {
+                    write.Write(json);
+                }
+            }
+        }
+        catch (Exception)
+        {
+            // Si por lo que sea no se puede guardar entonces no se hace nada
+        }
+    }
+
+    public SaveData TryLoad()
+    {
+        SaveData loadedData;
+
+        if (File.Exists(rutaCompleta))
+        {
+            try
+            {
+                string fileData;
+
+                using (FileStream stream = new FileStream(rutaCompleta, FileMode.Open))
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    fileData = reader.ReadToEnd();
+                }
+
+                loadedData = JsonUtility.FromJson<SaveData>(fileData);
+            }
+            catch (Exception)
+            {
+                loadedData = new SaveData();
+            }
+        }
+        else
+        {
+            // Si no existe el archivo de guardado pues lo creamos
+            loadedData = new SaveData();
+        }
+
+        return loadedData;
+    }
+}

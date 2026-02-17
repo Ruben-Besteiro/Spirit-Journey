@@ -1,13 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerModeManager : MonoBehaviour
+public class PlayerModeManager : MonoBehaviour, ISaveable
 {
     [Header("Available Modes")]
     public List<PlayerModeData> availableModes;
     private List<PlayerModeRuntime> runtimeModes = new();
     private PlayerModeRuntime currentRuntimeMode;
     private int selectedIndex = 0;
+
+    public bool[] unlockedBenditions;
 
     [SerializeField] private PlayerModeData defaultMode;
     private PlayerModeRuntime defaultRuntimeMode;
@@ -78,13 +80,16 @@ public class PlayerModeManager : MonoBehaviour
         }
     }
 
+    // Si las bendiciones se desbloquean de forma lineal
     public void SelectNextMode()
     {
         if (runtimeModes.Count == 0) return;
 
-        selectedIndex++;
-        if (selectedIndex >= runtimeModes.Count)
-            selectedIndex = 0;
+        do
+        {
+            selectedIndex++;
+            if (selectedIndex >= unlockedBenditions.Length) selectedIndex = 0;
+        } while (!unlockedBenditions[selectedIndex]);
 
         OnModeSelectionChanged?.Invoke(selectedIndex);
         DeactivateActiveMode();
@@ -94,9 +99,11 @@ public class PlayerModeManager : MonoBehaviour
     {
         if (runtimeModes.Count == 0) return;
 
-        selectedIndex--;
-        if (selectedIndex < 0)
-            selectedIndex = runtimeModes.Count - 1;
+        do
+        {
+            selectedIndex--;
+            if (selectedIndex < 0) selectedIndex = unlockedBenditions.Length - 1;
+        } while (!unlockedBenditions[selectedIndex]);
 
         OnModeSelectionChanged?.Invoke(selectedIndex);
         DeactivateActiveMode();
@@ -158,4 +165,15 @@ public class PlayerModeManager : MonoBehaviour
         => currentRuntimeMode.IsActive == true && currentRuntimeMode.CanWallClimb();
     public bool CanDoubleJump()
         => currentRuntimeMode.IsActive == true && currentRuntimeMode.CanDoubleJump();
+
+    public void SaveData(SaveData data)
+    {
+        data.unlockedBenditions = unlockedBenditions;
+    }
+
+    public void LoadData(SaveData data)
+    {
+        print(data.unlockedBenditions);
+        unlockedBenditions = data.unlockedBenditions;
+    }
 }
