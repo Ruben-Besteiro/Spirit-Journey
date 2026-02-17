@@ -37,7 +37,6 @@ public class AttackState : PlayerState
     {
         if (controller.damaged.source != null)
         {
-            controller.DisableAttackBox(); // Desactivar attackBox antes de cambiar a Hurt
             stateMachine.ChangeState(new HurtState(stateMachine, controller));
             return;
         }
@@ -56,7 +55,6 @@ public class AttackState : PlayerState
 
         if (comboTimer >= comboWindow)
         {
-            controller.DisableAttackBox();
             stateMachine.ChangeState(new IdleState(stateMachine, controller));
         }
     }

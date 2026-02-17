@@ -15,6 +15,10 @@ public class GameManager : MonoBehaviour
     private SaveData data;
     private List<ISaveable> saveableObjects;
 
+    public float timer = 0;
+    public bool timerEnabled;
+    public int kills = 0;
+
     private bool isPaused = false;
 
     public bool IsPaused => isPaused;
@@ -48,6 +52,13 @@ public class GameManager : MonoBehaviour
         {
             obj.LoadData(data);
         }
+
+        timerEnabled = true;        // Esto es obligatorio ponerlo aquí y no arriba porque si no no va
+    }
+
+    private void Update()
+    {
+        if (timerEnabled) timer += Time.deltaTime;
     }
 
     /* PAUSE SYSTEM */
@@ -57,6 +68,7 @@ public class GameManager : MonoBehaviour
             return;
 
         isPaused = true;
+        timerEnabled = false;
 
         OnGamePaused?.Invoke();
     }
@@ -67,6 +79,7 @@ public class GameManager : MonoBehaviour
             return;
 
         isPaused = false;
+        timerEnabled = true;
 
         OnGameResumed?.Invoke();
     }

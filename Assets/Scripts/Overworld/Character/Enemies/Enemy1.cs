@@ -187,7 +187,11 @@ public class Enemy1 : OverworldObject
         currentHP -= damaged.amount;
         //Debug.Log("Enemy damaged by " + info.source.name + " -> " + currentHP + " remaining");
 
-        if (currentHP <= 0) Destroy(gameObject);
+        if (currentHP <= 0)
+        {
+            GameManager.Instance.kills++;
+            Destroy(gameObject);
+        }
         else
         {
             Vector3 damageDir = (transform.position - damaged.source.transform.position).normalized;
