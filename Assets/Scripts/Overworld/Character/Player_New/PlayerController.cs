@@ -46,7 +46,6 @@ public class PlayerController : OverworldObject
     public float wallJumpBackForce = 5f;
 
     [Header("Combat")]
-    [SerializeField] private AttackBox attackBox;
     [SerializeField] private Damageable damageable;
 
     [HideInInspector] public DamageInfo damaged;
@@ -79,10 +78,6 @@ public class PlayerController : OverworldObject
         { damageable = GetComponent<Damageable>(); }
         damageable.OnDamaged += OnDamageReceived;
 
-        if (attackBox != null)
-        {attackBox = GetComponentInChildren<AttackBox>();}
-        attackBox.Setup(gameObject);
-
         if (damageable == null)
         { damageable = GetComponent<Damageable>(); }
         damageable.OnDamaged += TakeDamage;
@@ -90,12 +85,7 @@ public class PlayerController : OverworldObject
         // Inicializar HP
         currentHP = maxHP;
 
-        if (attackBox != null)
-            attackBox.enabled = false;
-
         damaged = new DamageInfo(0, null);
-
-        DisableAttackBox();
     }
 
     private void OnDestroy()
@@ -336,15 +326,5 @@ public class PlayerController : OverworldObject
             characterController.Move(dir * Time.deltaTime * knockbackSpeed);
             knockbackSpeed--;
         }
-    }
-    
-    public void EnableAttackBox()
-    {
-        if (attackBox != null) attackBox.gameObject.SetActive(true);
-    }
-
-    public void DisableAttackBox()
-    {
-        if (attackBox != null) attackBox.gameObject.SetActive(false);
     }
 }
