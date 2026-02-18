@@ -7,7 +7,7 @@ public class Enemy2 : Enemy1
     [SerializeField] Transform shootPosition;
     [SerializeField] float shootForce;
 
-    [SerializeField] float shootCooldown = 5;
+    [SerializeField] float shootCooldown = 2;
     float shootTimer = 0;
 
     protected override void Update()
@@ -31,7 +31,7 @@ public class Enemy2 : Enemy1
         GameObject shot = Instantiate(bullet, shootPosition.position, Quaternion.LookRotation(vectorToPlayer2));
         shot.GetComponent<Rigidbody>().AddForce(vectorToPlayer.normalized * shootForce, ForceMode.Impulse);
 
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
 
         shootTimer = 0;
         attackCoroutine = null;

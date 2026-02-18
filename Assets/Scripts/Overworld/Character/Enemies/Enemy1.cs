@@ -98,12 +98,12 @@ public class Enemy1 : OverworldObject
 
         foreach (RaycastHit h in hits)
         {
-            // El raycast coge el primer objeto que no sea del propio enemigo
-            if (h.collider.transform.root == transform.root) continue;
+            // Excluimos ciertas cosas
+            if (h.collider.transform.root == transform.root || h.collider.gameObject.layer == 3 || h.collider.gameObject.CompareTag("Enemy") || h.collider.gameObject.CompareTag("Trigger") || h.collider.gameObject.CompareTag("Bullet")) continue;
 
             hit = h;
 
-            if (hit.collider.CompareTag("Player") || hit.collider.gameObject.layer == 3)        // 
+            if (hit.collider.CompareTag("Player") || hit.collider.gameObject.layer == 3)
             {
                 Debug.Log("Jugador encontrado");
                 Debug.DrawRay(transform.position, vectorToPlayer.normalized * playerDetectDistance, Color.green);
@@ -111,12 +111,18 @@ public class Enemy1 : OverworldObject
             }
             else
             {
-                if (hit.collider.gameObject.layer == 3) print("Detectó el suelo erróneamente");
-                print(gameObject.name + " Se encontró " + hit.collider.gameObject.name);
                 Debug.DrawRay(transform.position, vectorToPlayer.normalized * playerDetectDistance, Color.red);
             }
+            print(gameObject.name + " Se encontró " + hit.collider.gameObject.name);
 
             break;
+        }
+
+        // Failsafe si por alguna razón el raycast que apunta al jugador no detecta al jugador
+        if (hits.Length == 0)
+        {
+            print(gameObject.name + " No se encontró nada");
+            currentState = EnemyStates.Chase;
         }
     }
 
@@ -137,10 +143,11 @@ public class Enemy1 : OverworldObject
 
         foreach (RaycastHit h in hits)
         {
-            if (h.collider.transform.root == transform.root) continue;
+            if (h.collider.transform.root == transform.root || h.collider.gameObject.layer == 3 || h.collider.gameObject.CompareTag("Enemy") || h.collider.gameObject.CompareTag("Trigger") || h.collider.gameObject.CompareTag("Bullet")) continue;
 
-            Debug.DrawRay(transform.position, vectorToPlayer.normalized * h.distance, Color.red);
+            Debug.DrawRay(transform.position, vectorToPlayer.normalized * h.distance, Color.green);
 
+            if (hits.Length == 0) break;
             if (!h.collider.gameObject.CompareTag("Player") && !h.collider.gameObject.CompareTag("Enemy"))
             {
                 currentState = EnemyStates.Wait;
