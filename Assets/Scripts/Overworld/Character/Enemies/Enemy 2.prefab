@@ -178,8 +178,10 @@ MonoBehaviour:
   maxHP: 5
   damageBox: {fileID: 0}
   hasTakenDamageThisFrame: 0
-  projectile: {fileID: 0}
+  bullet: {fileID: 8459196786066291856, guid: 5e2c5eedcebed2c4a876a608ebf0c40e, type: 3}
   shootPosition: {fileID: 1209739043560954224}
+  shootForce: 50
+  shootCooldown: 5
 --- !u!54 &6660829607831555766
 Rigidbody:
   m_ObjectHideFlags: 0

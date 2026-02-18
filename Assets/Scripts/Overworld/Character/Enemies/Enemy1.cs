@@ -15,7 +15,7 @@ public class Enemy1 : OverworldObject
 
     [Header("Detection")]
     [SerializeField] protected LayerMask groundMask;
-    [SerializeField] protected float playerDetectDistance = 20;
+    [SerializeField] protected float playerDetectDistance = 100;
 
     [Header("Health")]
     [SerializeField] protected float maxHP = 2;
@@ -56,7 +56,6 @@ public class Enemy1 : OverworldObject
     public void OnDamageReceived(DamageInfo info)
     {
         damaged = new DamageInfo(info.amount, info.source);
-        Debug.Log($"Enemy damaged: {info.amount}");
     }
 
     protected virtual void Update()
@@ -104,7 +103,7 @@ public class Enemy1 : OverworldObject
 
             hit = h;
 
-            if (hit.collider.CompareTag("Player"))
+            if (hit.collider.CompareTag("Player") || hit.collider.gameObject.layer == 3)        // 
             {
                 Debug.Log("Jugador encontrado");
                 Debug.DrawRay(transform.position, vectorToPlayer.normalized * playerDetectDistance, Color.green);
@@ -112,7 +111,8 @@ public class Enemy1 : OverworldObject
             }
             else
             {
-                print("Se encontró " + hit.collider.gameObject.name);
+                if (hit.collider.gameObject.layer == 3) print("Detectó el suelo erróneamente");
+                print(gameObject.name + " Se encontró " + hit.collider.gameObject.name);
                 Debug.DrawRay(transform.position, vectorToPlayer.normalized * playerDetectDistance, Color.red);
             }
 
@@ -160,7 +160,7 @@ public class Enemy1 : OverworldObject
     {
         if (agent.enabled) agent.isStopped = true;
         damageBox.enabled = false;
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
         attackCoroutine = null;
         currentState = EnemyStates.Chase;
         damageBox.enabled = true;
@@ -210,5 +210,6 @@ public class Enemy1 : OverworldObject
             knockbackSpeed -= Time.deltaTime * 30f;
             yield return null;
         }
+        //agent.SetDestination(playerTransform.position);
     }
 }
