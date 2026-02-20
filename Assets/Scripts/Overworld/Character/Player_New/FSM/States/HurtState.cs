@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class HurtState : PlayerState
 {
-    private float hurtDuration = 1f; // Tiempo que dura el estado de daño
+    private float hurtDuration = 1f; // Tiempo que dura el estado de daï¿½o
     private float timer;
 
     public HurtState(PlayerStateMachine stateMachine, PlayerController controller)
@@ -11,7 +11,7 @@ public class HurtState : PlayerState
 
     public override void Enter()
     {
-        // Restablecer el daño pendiente a 0
+        // Restablecer el daï¿½o pendiente a 0
         controller.damaged = new DamageInfo(0, null);
 
         timer = 0;
@@ -23,11 +23,9 @@ public class HurtState : PlayerState
 
         controller.ApplyGravity();
 
-        // Esperar a que termine el tiempo de hurt para decidir si matar al jugador o devolverle el control
         if (timer >= hurtDuration)
         {
-            if (controller.currentHP <= 0 && timer >= hurtDuration) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            else stateMachine.ChangeState(new IdleState(stateMachine, controller));
+            stateMachine.ChangeState(new IdleState(stateMachine, controller));
         }
     }
 }

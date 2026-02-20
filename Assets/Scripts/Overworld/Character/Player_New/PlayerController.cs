@@ -3,6 +3,7 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : OverworldObject
@@ -98,8 +99,7 @@ public class PlayerController : OverworldObject
 
     public void OnDamageReceived(DamageInfo info)
     {
-        damaged = new DamageInfo(info.amount, info.source); 
-        Debug.Log($"Player damaged: {info.amount}");
+        damaged = new DamageInfo(info.amount, info.source);
     }
 
     // -- Animator --
@@ -290,6 +290,8 @@ public class PlayerController : OverworldObject
         if (hasTakenDamageThisFrame) return;
         hasTakenDamageThisFrame = true;
 
+
+
         //Knockback
         if (damaged.source != null)
         {
@@ -298,6 +300,8 @@ public class PlayerController : OverworldObject
             Debug.Log("Player damaged " + currentHP);
             Vector3 damageDir = (transform.position - damaged.source.transform.position).normalized;
             if (!damaged.source.gameObject.CompareTag("Bullet")) Knockback(damageDir);
+
+            if (currentHP <= 0) GameSceneManager.Instance.LoadScene(SceneManager.GetActiveScene().name, SceneTransition.FadeBlack, false);
         }
     }
 

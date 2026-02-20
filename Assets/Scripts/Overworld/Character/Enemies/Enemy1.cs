@@ -27,6 +27,7 @@ public class Enemy1 : OverworldObject
     RaycastHit hit;
     protected NavMeshAgent agent;
     DamageInfo damaged;
+    [SerializeField] public GameObject bullet;     // Prefab de la bala (solo si utiliza)
     [SerializeField] protected BoxCollider damageBox;
 
     public bool hasTakenDamageThisFrame = false;

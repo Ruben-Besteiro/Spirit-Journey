@@ -162,9 +162,9 @@ MonoBehaviour:
     m_Bits: 8
   playerDetectDistance: 100
   maxHP: 5
+  bullet: {fileID: 2764831730248317137, guid: 35af84ab80645494ea1b2e06d8e36114, type: 3}
   damageBox: {fileID: 0}
   hasTakenDamageThisFrame: 0
-  bullet: {fileID: 0}
   shootPosition: {fileID: 9120925178328532866}
   shootForce: 10
   shootCooldown: 5

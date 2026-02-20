@@ -8,11 +8,11 @@ public class Bullet : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Destroy(gameObject);
             if (!other.gameObject.GetComponent<PlayerController>().hasTakenDamageThisFrame)
             {
                 other.gameObject.GetComponent<Damageable>().TakeDamage(new DamageInfo(damage, gameObject));
             }
+            Destroy(gameObject);
         }
     }
 }

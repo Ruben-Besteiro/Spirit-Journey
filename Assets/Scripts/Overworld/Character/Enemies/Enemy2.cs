@@ -3,9 +3,8 @@ using UnityEngine;
 
 public class Enemy2 : Enemy1
 {
-    [SerializeField] GameObject bullet;     // Prefab de la bala
     [SerializeField] Transform shootPosition;
-    [SerializeField] float shootForce;
+    [SerializeField] float shootForce = 50;
 
     [SerializeField] float shootCooldown = 2;
     float shootTimer = 0;
@@ -29,7 +28,8 @@ public class Enemy2 : Enemy1
         Vector3 vectorToPlayer2 = (playerTransform.position - shootPosition.position).normalized;
 
         GameObject shot = Instantiate(bullet, shootPosition.position, Quaternion.LookRotation(vectorToPlayer2));
-        shot.GetComponent<Rigidbody>().AddForce(vectorToPlayer.normalized * shootForce, ForceMode.Impulse);
+        print(shot);
+        shot.GetComponent<Rigidbody>().AddForce(vectorToPlayer2.normalized * shootForce, ForceMode.Impulse);
 
         yield return new WaitForSeconds(1);
 
