@@ -55,6 +55,8 @@ public class PlayerController : OverworldObject
     private Vector3 currentWallNormal;
     public bool hasTakenDamageThisFrame = false;
 
+    [SerializeField] GameObject hitboxVisual;
+
     public Vector2 MoveInput { get; set; }
     public bool JumpPressed { get; set; }
     public bool AttackPressed { get; set; }

@@ -72,7 +72,6 @@ public class PlayerModeHUD : MonoBehaviour
     private void UpdateActivation(PlayerModeRuntime activeMode)
     {
         int index = manager.GetSelectedIndex();
-
         modeIcons[index].sprite = activeMode.data.activeSprite;
     }
     private void ClearActivation()

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerStateMachine : OverworldObject
 {
-    private PlayerState currentState;
+    public PlayerState currentState;
     bool active;
 
     public void Initialize(PlayerState startingState)

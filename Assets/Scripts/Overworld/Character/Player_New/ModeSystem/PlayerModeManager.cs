@@ -6,7 +6,7 @@ public class PlayerModeManager : MonoBehaviour, ISaveable
     [Header("Available Modes")]
     public List<PlayerModeData> availableModes;
     private List<PlayerModeRuntime> runtimeModes = new();
-    private PlayerModeRuntime currentRuntimeMode;
+    public PlayerModeRuntime currentRuntimeMode;
     private int selectedIndex = 0;
 
     public bool[] unlockedBenditions;

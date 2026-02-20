@@ -20,4 +20,7 @@ public class PlayerModeData : ScriptableObject
 
     [Header("Combat")]
     public float damageMultiplier = 1f;
+    public float boxCastRangeXY;
+    public float boxCastRangeZ;
+    public float boxCastOffset;
 }

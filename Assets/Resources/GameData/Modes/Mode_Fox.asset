@@ -17,8 +17,10 @@ MonoBehaviour:
   inactiveSprite: {fileID: 21300000, guid: 53ee2b85ac0e716449cd052218455957, type: 3}
   activeSprite: {fileID: 21300000, guid: d98d9439d4969664c8243157dadeae1b, type: 3}
   modelPrefab: {fileID: 439472018191784601, guid: 43de3776073e9344587b7464abed781a, type: 3}
-  animatorOverride: {fileID: 9100000, guid: 4267d0549c4ed074f9153cc14d70e826, type: 2}
   canWallJump: 0
   canWallClimb: 0
   canDoubleJump: 0
   damageMultiplier: 2
+  boxCastRangeXY: 2
+  boxCastRangeZ: 4
+  boxCastOffset: 1
