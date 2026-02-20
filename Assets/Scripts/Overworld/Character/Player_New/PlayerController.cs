@@ -118,7 +118,9 @@ public class PlayerController : OverworldObject
     public void AnimTrigger(string Name)
     {
         if (animator != null)
-            animator.SetTrigger(Name);
+        {
+            //animator.SetTrigger(Name);
+        }
     }
 
     public void AnimBool(string Name, bool state)
@@ -256,11 +258,8 @@ public class PlayerController : OverworldObject
 
     public void Jump()
     {
-        if (characterController.isGrounded)
-        {
-            float finalJump = modeManager.ModifyJumpForce(jumpForce);
-            velocity.y = finalJump;
-        }
+        float finalJump = modeManager.ModifyJumpForce(jumpForce);
+        velocity.y = finalJump;
     }
 
     public void ClimbMove()

@@ -88,8 +88,8 @@ public class PlayerModeManager : MonoBehaviour, ISaveable
         /*do
         {*/
             selectedIndex++;
-            /*if (selectedIndex >= unlockedBenditions.Length) selectedIndex = 0;
-        } while (!unlockedBenditions[selectedIndex]);*/
+            if (selectedIndex >= unlockedBenditions.Length) selectedIndex = 0;
+        /* }while (!unlockedBenditions[selectedIndex]);*/
 
         OnModeSelectionChanged?.Invoke(selectedIndex);
         DeactivateActiveMode();
@@ -102,8 +102,8 @@ public class PlayerModeManager : MonoBehaviour, ISaveable
         /*do
         {*/
             selectedIndex--;
-            /*if (selectedIndex < 0) selectedIndex = unlockedBenditions.Length - 1;
-        } while (!unlockedBenditions[selectedIndex]);*/
+            if (selectedIndex < 0) selectedIndex = unlockedBenditions.Length - 1;
+        /*} while (!unlockedBenditions[selectedIndex]);*/
 
         OnModeSelectionChanged?.Invoke(selectedIndex);
         DeactivateActiveMode();
@@ -142,7 +142,7 @@ public class PlayerModeManager : MonoBehaviour, ISaveable
     {
         if (currentRuntimeMode == null) return;
 
-        OnModeDeactivated.Invoke();
+        OnModeDeactivated?.Invoke();
         currentRuntimeMode.Deactivate();
         currentRuntimeMode = defaultRuntimeMode;
     }

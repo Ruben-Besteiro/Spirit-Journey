@@ -31,9 +31,14 @@ public class WallClimbState : PlayerState
             stateMachine.ChangeState(new IdleState(stateMachine, controller));
         }
 
-        if (!controller.CheckWall(out RaycastHit hit) || !modeManager.CanWallClimb())
+        if (!modeManager.CanWallClimb())
         {
             stateMachine.ChangeState(new FallState(stateMachine, controller));
+        }
+
+        if (!controller.CheckWall(out RaycastHit hit))
+        {
+            stateMachine.ChangeState(new JumpState(stateMachine, controller));
         }
     }
     public override void Exit()

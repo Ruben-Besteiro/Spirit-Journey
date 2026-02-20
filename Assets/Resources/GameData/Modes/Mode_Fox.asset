@@ -19,7 +19,7 @@ MonoBehaviour:
   modelPrefab: {fileID: 439472018191784601, guid: 43de3776073e9344587b7464abed781a, type: 3}
   canWallJump: 0
   canWallClimb: 0
-  canDoubleJump: 0
+  canDoubleJump: 1
   damageMultiplier: 2
   boxCastRangeXY: 2
   boxCastRangeZ: 4

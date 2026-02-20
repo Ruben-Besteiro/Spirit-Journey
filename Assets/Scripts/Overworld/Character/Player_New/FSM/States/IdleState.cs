@@ -6,7 +6,9 @@ public class IdleState : PlayerState
         : base(stateMachine, controller) { }
 
     public override void Enter()
-    { }
+    {
+        controller.hasDoubleJumped = false;
+    }
 
     public override void HandleInput()
     {

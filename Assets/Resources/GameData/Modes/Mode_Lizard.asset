@@ -17,7 +17,7 @@ MonoBehaviour:
   inactiveSprite: {fileID: 21300000, guid: 6e17fec26dfb4f54f976300a96fafcdd, type: 3}
   activeSprite: {fileID: 21300000, guid: d8ec8404760e5a24f830859cc8ed18fe, type: 3}
   modelPrefab: {fileID: 3029285362239930315, guid: 8e750348573374546b9ddbc736edd26e, type: 3}
-  canWallJump: 1
+  canWallJump: 0
   canWallClimb: 1
   canDoubleJump: 0
   damageMultiplier: 1
