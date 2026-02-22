@@ -4,25 +4,39 @@ using UnityEngine.UI;
 
 public class PlayerModeHUD : MonoBehaviour
 {
-    [Header("References")]
+    [Header("References (Mode)")]
     [SerializeField] private PlayerModeManager manager;
     [SerializeField] private Transform modesContainer;
     [SerializeField] private Image modeIconPrefab;
     [SerializeField] private Image staminaFillImage;
 
+    [Header("References (HP)")]
+    [SerializeField] private PlayerController controller;
+    [SerializeField] private Image hpFillImage;
+
     private List<Image> modeIcons = new();
 
     private void Start()
     {
-        if (manager == null)
+        if (manager == null || controller == null)
         {
-            Debug.LogWarning("HUD has no PlayerModeManager assigned.");
+            Debug.LogWarning("HUD has no PlayerModeManager or PlayerController assigned.");
             return;
         }
 
         CreateModeIcons();
         SubscribeToEvents();
         InitializeHUD();
+    }
+
+    private void SubscribeToEvents()
+    {
+        manager.OnModeSelectionChanged += UpdateSelection;
+        manager.OnModeActivated += UpdateActivation;
+        manager.OnModeDeactivated += ClearActivation;
+        manager.OnStaminaChanged += UpdateStamina;
+
+        controller.OnDamaged += UpdateHP;
     }
 
     private void OnDestroy()
@@ -33,6 +47,8 @@ public class PlayerModeHUD : MonoBehaviour
         manager.OnModeActivated -= UpdateActivation;
         manager.OnModeDeactivated -= ClearActivation;
         manager.OnStaminaChanged -= UpdateStamina;
+
+        controller.OnDamaged -= UpdateHP;
     }
 
     private void CreateModeIcons()
@@ -47,13 +63,11 @@ public class PlayerModeHUD : MonoBehaviour
         }
     }
 
-    private void SubscribeToEvents()
+    private void UpdateHP(DamageInfo info)
     {
-        manager.OnModeSelectionChanged += UpdateSelection;
-        manager.OnModeActivated += UpdateActivation;
-        manager.OnModeDeactivated += ClearActivation;
-        manager.OnStaminaChanged += UpdateStamina;
+        hpFillImage.fillAmount = controller.currentHP / controller.maxHP;
     }
+
     private void InitializeHUD()
     {
         UpdateSelection(0);

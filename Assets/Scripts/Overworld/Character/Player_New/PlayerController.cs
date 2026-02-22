@@ -57,6 +57,7 @@ public class PlayerController : OverworldObject
     public bool hasTakenDamageThisFrame = false;
 
     [SerializeField] GameObject hitboxVisual;
+    public event Action<DamageInfo> OnDamaged;
 
     public Vector2 MoveInput { get; set; }
     public bool JumpPressed { get; set; }
@@ -99,6 +100,7 @@ public class PlayerController : OverworldObject
 
     public void OnDamageReceived(DamageInfo info)
     {
+        OnDamaged?.Invoke(info);
         damaged = new DamageInfo(info.amount, info.source);
     }
 

@@ -10,8 +10,6 @@ public class AttackState : PlayerState
     private float boxCastRangeZ = 4;
     private float boxCastRangeXY = 1.5f;
     private float boxCastOffset = 1;
-    GameObject hitboxVisual;        // Esta hitbox es solo visual. No tiene collider
-    Renderer hitboxRenderer;
 
     public float damage = 1;
 
@@ -20,9 +18,6 @@ public class AttackState : PlayerState
 
     public override void Enter()
     {
-        hitboxVisual = GameObject.Find("Visual Hitbox");
-        hitboxRenderer = hitboxVisual.GetComponent<Renderer>();
-        hitboxRenderer.enabled = false;         // No funciona
         var transformation = controller.GetComponent<PlayerModeManager>().currentRuntimeMode.data;
         boxCastRangeXY = transformation.boxCastRangeXY;
         boxCastRangeZ = transformation.boxCastRangeZ;
@@ -34,18 +29,13 @@ public class AttackState : PlayerState
 
         detectedEnemies = Physics.OverlapBox(controller.transform.position + controller.transform.forward * boxCastOffset, new Vector3(boxCastRangeXY, boxCastRangeXY, boxCastRangeZ / 2), controller.transform.rotation);
 
+        Color i = Color.red;
+
         foreach (Collider c in detectedEnemies)
         {
             if (!c.CompareTag("Enemy")) continue;
 
-            // Activamos la hitbox visualmente para dar feedback si le damos a algo
-            hitboxVisual.transform.position = controller.transform.position + controller.transform.forward * boxCastOffset;
-            hitboxVisual.transform.localScale = new Vector3(boxCastRangeXY, boxCastRangeXY, boxCastRangeZ);
-            hitboxVisual.transform.rotation = controller.transform.rotation;
-            Color color = hitboxRenderer.material.color;
-            color.a = 0.1f;
-            hitboxRenderer.material.color = color;
-            hitboxRenderer.enabled = true;
+            i = Color.yellow;
 
             Damageable dmg = c.gameObject.GetComponentInParent<Damageable>();
             if (dmg == null || c.gameObject.CompareTag("Player")) continue;
@@ -53,6 +43,8 @@ public class AttackState : PlayerState
             DamageInfo info = new DamageInfo(damage, controller.gameObject);
             dmg.TakeDamage(info);
         }
+
+        DebugBoxDrawer.DrawBox(controller.transform.position + controller.transform.forward * boxCastOffset, new Vector3(boxCastRangeXY, boxCastRangeXY, boxCastRangeZ / 2), controller.transform.rotation, i, 0.5f);
     }
 
     public override void HandleInput()
@@ -75,9 +67,16 @@ public class AttackState : PlayerState
     {
         comboTimer += Time.deltaTime;
 
-        if (comboTimer >= comboWindow)
+        if ( comboTimer >= comboWindow/2)
         {
-            stateMachine.ChangeState(new IdleState(stateMachine, controller));
+            if (comboTimer >= comboWindow)
+            {
+                stateMachine.ChangeState(new IdleState(stateMachine, controller));
+            }
+            else if (controller.AttackPressed)
+            {
+                stateMachine.ChangeState(new AttackState(stateMachine, controller));
+            }
         }
     }
 
@@ -92,6 +91,6 @@ public class AttackState : PlayerState
 
     public override void Exit()
     {
-        hitboxRenderer.enabled = false;
+        
     }
 }

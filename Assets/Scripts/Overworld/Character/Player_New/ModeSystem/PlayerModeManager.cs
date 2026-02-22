@@ -93,6 +93,7 @@ public class PlayerModeManager : MonoBehaviour, ISaveable
 
         OnModeSelectionChanged?.Invoke(selectedIndex);
         DeactivateActiveMode();
+        Debug.Log("ID: " + selectedIndex);
     }
 
     public void SelectPreviousMode()
@@ -107,6 +108,7 @@ public class PlayerModeManager : MonoBehaviour, ISaveable
 
         OnModeSelectionChanged?.Invoke(selectedIndex);
         DeactivateActiveMode();
+        Debug.Log("ID: "+selectedIndex);
     }
 
     // -- Activar modos --
