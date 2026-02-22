@@ -27,8 +27,8 @@ public class Enemy2 : Enemy1
 
         Vector3 vectorToPlayer2 = (playerTransform.position - shootPosition.position).normalized;
 
-        GameObject shot = Instantiate(bullet, shootPosition.position, Quaternion.LookRotation(vectorToPlayer2));
-        print(shot);
+        GameObject shot = Instantiate(bullet, shootPosition.position, Quaternion.identity);
+        shot.transform.LookAt(playerTransform);
         shot.GetComponent<Rigidbody>().AddForce(vectorToPlayer2.normalized * shootForce, ForceMode.Impulse);
 
         yield return new WaitForSeconds(1);

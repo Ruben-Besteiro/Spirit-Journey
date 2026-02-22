@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spawner : MonoBehaviour
+public class Spawner : OverworldObject
 {
+    [SerializeField] List<GameObject> spawnPoints;
     [SerializeField] List<SpawnPhase> phases = new();
     int phaseIndex = 0;
     int enemiesSpawnedThisPhase = 0;
@@ -19,7 +20,7 @@ public class Spawner : MonoBehaviour
 
     void Update()
     {
-        if (player.currentHP > 0)
+        if (player.currentHP > 0 && !GameManager.Instance.IsPaused)
         {
             timer += Time.deltaTime;
 
@@ -27,7 +28,9 @@ public class Spawner : MonoBehaviour
             {
                 if (enemiesSpawnedThisPhase < enemiesPerPhase)
                 {
-                    Instantiate(currentPhase.enemyPrefab);
+                    int spawnPointIndex = Random.Range(0, spawnPoints.Count);
+                    print(spawnPointIndex);
+                    Instantiate(currentPhase.enemyPrefab, spawnPoints[spawnPointIndex].transform.position, Quaternion.identity);
                     enemiesSpawnedThisPhase++;
                     if (currentPhase.spawnInterval > currentPhase.minSpawnInterval) currentPhase.spawnInterval -= currentPhase.spawnTimeIncrement;
                 } else
