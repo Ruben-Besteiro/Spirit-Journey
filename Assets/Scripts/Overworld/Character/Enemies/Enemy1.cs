@@ -100,11 +100,11 @@ public class Enemy1 : OverworldObject
         foreach (RaycastHit h in hits)
         {
             // Excluimos ciertas cosas
-            if (h.collider.transform.root == transform.root || h.collider.gameObject.layer == 3 || h.collider.gameObject.CompareTag("Enemy") || h.collider.gameObject.CompareTag("Trigger") || h.collider.gameObject.CompareTag("Bullet")) continue;
+            if (h.collider.transform.root == transform.root || h.collider.gameObject.CompareTag("Enemy") || h.collider.gameObject.CompareTag("Trigger") || h.collider.gameObject.CompareTag("Bullet")) continue;
 
             hit = h;
 
-            if (hit.collider.CompareTag("Player") || hit.collider.gameObject.layer == 3)
+            if (hit.collider.CompareTag("Player"))
             {
                 Debug.Log("Jugador encontrado");
                 Debug.DrawRay(transform.position, vectorToPlayer.normalized * playerDetectDistance, Color.green);
@@ -114,7 +114,7 @@ public class Enemy1 : OverworldObject
             {
                 Debug.DrawRay(transform.position, vectorToPlayer.normalized * playerDetectDistance, Color.red);
             }
-            print(gameObject.name + " Se encontró " + hit.collider.gameObject.name);
+            print(gameObject.name + " Se encontró " + hit.collider.gameObject.name + " " + hit.collider.gameObject.tag);
 
             break;
         }
@@ -129,6 +129,8 @@ public class Enemy1 : OverworldObject
 
     protected virtual void ChaseUpdate()
     {
+        print("Estado Chase");
+
         // Nos persigue usando el Nav Mesh
         agent.isStopped = false;
         agent.SetDestination(playerTransform.position);
@@ -144,7 +146,7 @@ public class Enemy1 : OverworldObject
 
         foreach (RaycastHit h in hits)
         {
-            if (h.collider.transform.root == transform.root || h.collider.gameObject.layer == 3 || h.collider.gameObject.CompareTag("Enemy") || h.collider.gameObject.CompareTag("Trigger") || h.collider.gameObject.CompareTag("Bullet")) continue;
+            if (h.collider.transform.root == transform.root || h.collider.gameObject.CompareTag("Enemy") || h.collider.gameObject.CompareTag("Trigger") || h.collider.gameObject.CompareTag("Bullet")) continue;
 
             Debug.DrawRay(transform.position, vectorToPlayer.normalized * h.distance, Color.green);
 
@@ -179,8 +181,8 @@ public class Enemy1 : OverworldObject
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            if (!other.gameObject.GetComponent<PlayerController>().hasTakenDamageThisFrame)
-                other.gameObject.GetComponent<Damageable>().TakeDamage(new DamageInfo(1, gameObject));
+            if (!other.gameObject.GetComponentInParent<PlayerController>().hasTakenDamageThisFrame)
+                other.gameObject.GetComponentInParent<Damageable>().TakeDamage(new DamageInfo(1, gameObject));
             currentState = EnemyStates.AttackCooldown;
         }
     }

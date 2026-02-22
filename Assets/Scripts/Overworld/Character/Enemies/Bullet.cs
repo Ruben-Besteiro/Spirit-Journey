@@ -8,9 +8,9 @@ public class Bullet : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            if (!other.gameObject.GetComponent<PlayerController>().hasTakenDamageThisFrame)
+            if (!other.gameObject.GetComponentInParent<PlayerController>().hasTakenDamageThisFrame)
             {
-                other.gameObject.GetComponent<Damageable>().TakeDamage(new DamageInfo(damage, gameObject));
+                other.gameObject.GetComponentInParent<Damageable>().TakeDamage(new DamageInfo(damage, gameObject));
             }
             Destroy(gameObject);
         }
