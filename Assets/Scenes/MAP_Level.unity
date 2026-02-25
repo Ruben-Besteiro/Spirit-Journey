@@ -32829,7 +32829,7 @@ MonoBehaviour:
   - {fileID: 1092798164}
   - {fileID: 1255179718}
   phases:
-  - enemyPrefab: {fileID: 6827430371851852206, guid: 2f4171885344d1e44b18a5fb06b506cc, type: 3}
+  - enemyPrefab: {fileID: 5461994548723159906, guid: 7cbc2350a6f60304c8351f97ab1f4d98, type: 3}
     spawnInterval: 4
     minSpawnInterval: 2
     spawnTimeIncrement: 0.2
