@@ -3773,7 +3773,6 @@ MonoBehaviour:
   availableModes:
   - {fileID: 11400000, guid: c9f96deb933bb854dbb1f466d16d2a5b, type: 2}
   - {fileID: 11400000, guid: a00b49e384354fe4a8799cd27dfa650e, type: 2}
-  unlockedBenditions: 
   defaultMode: {fileID: 11400000, guid: f079117a885518d4083514df6832c398, type: 2}
   maxStamina: 100
   currentStamina: 0
@@ -8066,7 +8065,7 @@ GameObject:
   - component: {fileID: 252553411}
   - component: {fileID: 252553410}
   - component: {fileID: 252553409}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}

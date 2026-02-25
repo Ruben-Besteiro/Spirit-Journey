@@ -114,7 +114,7 @@ public class Enemy1 : OverworldObject
             {
                 Debug.DrawRay(transform.position, vectorToPlayer.normalized * playerDetectDistance, Color.red);
             }
-            print(gameObject.name + " Se encontró " + hit.collider.gameObject.name + " " + hit.collider.gameObject.tag);
+            //print(gameObject.name + " Se encontró " + hit.collider.gameObject.name + " " + hit.collider.gameObject.tag);
 
             break;
         }
@@ -129,7 +129,7 @@ public class Enemy1 : OverworldObject
 
     protected virtual void ChaseUpdate()
     {
-        print("Estado Chase");
+        //print("Estado Chase");
 
         // Nos persigue usando el Nav Mesh
         agent.isStopped = false;

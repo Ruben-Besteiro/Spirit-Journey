@@ -9,8 +9,6 @@ public class PlayerModeManager : MonoBehaviour, ISaveable
     public PlayerModeRuntime currentRuntimeMode;
     private int selectedIndex = 0;
 
-    public bool[] unlockedBenditions;
-
     [SerializeField] private PlayerModeData defaultMode;
     private PlayerModeRuntime defaultRuntimeMode;
     public int GetSelectedIndex() => selectedIndex;
@@ -88,12 +86,12 @@ public class PlayerModeManager : MonoBehaviour, ISaveable
         /*do
         {*/
             selectedIndex++;
-            if (selectedIndex >= unlockedBenditions.Length) selectedIndex = 0;
+            if (selectedIndex >= availableModes.Count) selectedIndex = 0;
         /* }while (!unlockedBenditions[selectedIndex]);*/
 
         OnModeSelectionChanged?.Invoke(selectedIndex);
         DeactivateActiveMode();
-        Debug.Log("ID: " + selectedIndex);
+        Debug.LogWarning("ID: " + selectedIndex);
     }
 
     public void SelectPreviousMode()
@@ -103,12 +101,12 @@ public class PlayerModeManager : MonoBehaviour, ISaveable
         /*do
         {*/
             selectedIndex--;
-            if (selectedIndex < 0) selectedIndex = unlockedBenditions.Length - 1;
+        if (selectedIndex < 0) { selectedIndex = availableModes.Count - 1; }
         /*} while (!unlockedBenditions[selectedIndex]);*/
 
         OnModeSelectionChanged?.Invoke(selectedIndex);
         DeactivateActiveMode();
-        Debug.Log("ID: "+selectedIndex);
+        Debug.LogWarning("ID: "+selectedIndex+", "+ availableModes.Count);
     }
 
     // -- Activar modos --
@@ -170,12 +168,11 @@ public class PlayerModeManager : MonoBehaviour, ISaveable
 
     public void SaveData(SaveData data)
     {
-        data.unlockedBenditions = unlockedBenditions;
+        data.unlockedBenditions = availableModes;
     }
 
     public void LoadData(SaveData data)
     {
-        print(data.unlockedBenditions);
-        unlockedBenditions = data.unlockedBenditions;
+
     }
 }

@@ -4,10 +4,10 @@ using UnityEngine;
 [System.Serializable]
 public class SaveData
 {
-    public bool[] unlockedBenditions;
+    public List<PlayerModeData> unlockedBenditions;
 
     public SaveData()
     {
-        unlockedBenditions = new bool[] { false, false };
+        unlockedBenditions = new List<PlayerModeData>();
     }
 }
