@@ -28,13 +28,13 @@ public class PlayerController : OverworldObject
     [SerializeField] private LayerMask groundLayer;
 
     [Header("Visual")]
-    [SerializeField] private Transform modelRoot;
+    /*[SerializeField] private Transform modelRoot;
     [SerializeField] private Animator defaultAnimator;
     private Animator animator;
 
     private GameObject currentModelInstance;
     private GameObject defaultModel;
-    private RuntimeAnimatorController defaultAnimatorController;
+    private RuntimeAnimatorController defaultAnimatorController;*/
 
     [Header("Air Control")]
     public float airAcceleration = 20f;
@@ -74,9 +74,9 @@ public class PlayerController : OverworldObject
         if (cameraTransform == null)
             cameraTransform = Camera.main.transform;
 
-        defaultModel = modelRoot.GetChild(0).gameObject;
+        /*defaultModel = modelRoot.GetChild(0).gameObject;
         animator = defaultAnimator;
-        defaultAnimatorController = animator.runtimeAnimatorController;
+        defaultAnimatorController = animator.runtimeAnimatorController;*/
 
         if (damageable != null)
         { damageable = GetComponent<Damageable>(); }
@@ -107,52 +107,52 @@ public class PlayerController : OverworldObject
     // -- Animator --
     private void LateUpdate()
     {
-        if (!isPaused && animator != null)
+        if (!isPaused/* && animator != null*/)
         {
             float newMoveSpeed = (MoveInput * moveSpeed).magnitude;
-            animator.SetFloat("Speed", newMoveSpeed);
+            //animator.SetFloat("Speed", newMoveSpeed);
             isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundLayer);
-            animator.SetBool("IsGrounded", isGrounded);
+            //animator.SetBool("IsGrounded", isGrounded);
         }
         hasTakenDamageThisFrame = false;
     }
 
     public void AnimTrigger(string Name)
     {
-        if (animator != null)
+        /*if (animator != null)
         {
             //animator.SetTrigger(Name);
-        }
+        }*/
     }
 
     public void AnimBool(string Name, bool state)
     {
-        if (animator != null)
-            animator.SetBool(Name, state);
+        /*if (animator != null)
+            animator.SetBool(Name, state);*/
     }
 
     public void ApplyVisualOverride(PlayerModeData data)
     {
         if (data.modelPrefab != null)
         {
-            if (currentModelInstance != null)
+            /*if (currentModelInstance != null)
                 Destroy(currentModelInstance);
 
             defaultModel.SetActive(false);
 
             currentModelInstance = Instantiate(data.modelPrefab, modelRoot);
 
-            animator = currentModelInstance.GetComponent<Animator>();
+            animator = currentModelInstance.GetComponent<Animator>();*/
         }
     }
     public void RestoreDefaultVisual()
     {
-        if (currentModelInstance != null)
+        /*if (currentModelInstance != null)
             Destroy(currentModelInstance);
 
         defaultModel.SetActive(true);
         animator.runtimeAnimatorController = defaultAnimatorController;
-        animator = defaultAnimator;
+        animator = defaultAnimator;*/
     }
 
     // -- Funciones de control --
@@ -310,11 +310,11 @@ public class PlayerController : OverworldObject
     //-- Pausa --
     protected override void OnGamePaused()
     {
-        animator.speed = 0f;
+        //animator.speed = 0f;
     }
     protected override void OnGameResumed()
     {
-        animator.speed = 1;
+        //animator.speed = 1;
     }
 
 

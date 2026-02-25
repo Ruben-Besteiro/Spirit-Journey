@@ -206,7 +206,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: fdd6b8d35b2a276448eaff1c7269b4e3, type: 3}
       propertyPath: m_Name
-      value: HumanModelPrefab
+      value: Vacio
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: fdd6b8d35b2a276448eaff1c7269b4e3, type: 3}
       propertyPath: m_TagString
@@ -329,37 +329,10 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1082271958561512970, guid: fdd6b8d35b2a276448eaff1c7269b4e3, type: 3}
+    - {fileID: -3090848061168836670, guid: fdd6b8d35b2a276448eaff1c7269b4e3, type: 3}
+    - {fileID: -4706228988682842286, guid: fdd6b8d35b2a276448eaff1c7269b4e3, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: fdd6b8d35b2a276448eaff1c7269b4e3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3132301805919095274}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fdd6b8d35b2a276448eaff1c7269b4e3, type: 3}
---- !u!1 &2162049584364909161 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: fdd6b8d35b2a276448eaff1c7269b4e3, type: 3}
-  m_PrefabInstance: {fileID: 1351165056117952312}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &3132301805919095274
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2162049584364909161}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4267d0549c4ed074f9153cc14d70e826, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0

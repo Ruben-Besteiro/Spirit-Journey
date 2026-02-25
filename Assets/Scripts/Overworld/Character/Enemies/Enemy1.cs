@@ -183,6 +183,7 @@ public class Enemy1 : OverworldObject
         {
             if (!other.gameObject.GetComponentInParent<PlayerController>().hasTakenDamageThisFrame)
                 other.gameObject.GetComponentInParent<Damageable>().TakeDamage(new DamageInfo(1, gameObject));
+            StartCoroutine(IEKnockback(-transform.forward));      // Aplicamos knockback al enemigo también para que no haya sandwiches
             currentState = EnemyStates.AttackCooldown;
         }
     }
@@ -213,6 +214,9 @@ public class Enemy1 : OverworldObject
     {
         NavMeshAgent agent = GetComponent<NavMeshAgent>();
         float knockbackSpeed = 15f;
+
+        // Si es el enemigo quien se hace knockback a sí mismo y no el jugador, la velocidad es menor
+        if (!hasTakenDamageThisFrame) knockbackSpeed = 10f;
 
         while (knockbackSpeed > 0)
         {

@@ -21,6 +21,8 @@ public class Enemy2 : Enemy1
         attackCoroutine = StartCoroutine(IEShoot());
     }
 
+    // Este no se queda quieto tras atacar o recibir daño
+
     private IEnumerator IEShoot()
     {
         if (agent.enabled) agent.isStopped = true;
