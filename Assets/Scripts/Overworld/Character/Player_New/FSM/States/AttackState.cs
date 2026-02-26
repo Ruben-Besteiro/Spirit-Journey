@@ -4,7 +4,7 @@ public class AttackState : PlayerState
 {
     private int comboStep = 0;
     private float comboTimer;
-    private float comboWindow = 0.8f;
+    private float comboWindow = 0.48f;
 
     private Collider[] detectedEnemies;
     private float boxCastRangeZ = 4;
@@ -43,13 +43,12 @@ public class AttackState : PlayerState
             DamageInfo info = new DamageInfo(damage, controller.gameObject);
             dmg.TakeDamage(info);
         }
-
         DebugBoxDrawer.DrawBox(controller.transform.position + controller.transform.forward * boxCastOffset, new Vector3(boxCastRangeXY, boxCastRangeXY, boxCastRangeZ / 2), controller.transform.rotation, i, 0.5f);
     }
 
     public override void HandleInput()
     {
-        if (controller.damaged.source != null)
+        if (controller.damaged.source != null && comboTimer >= comboWindow / 2)
         {
             stateMachine.ChangeState(new HurtState(stateMachine, controller));
             return;
@@ -65,6 +64,8 @@ public class AttackState : PlayerState
 
     public override void Update()
     {
+        controller.ApplyGravity(comboTimer/comboWindow);
+
         comboTimer += Time.deltaTime;
 
         if ( comboTimer >= comboWindow/2)

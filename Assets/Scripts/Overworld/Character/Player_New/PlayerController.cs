@@ -238,7 +238,7 @@ public class PlayerController : OverworldObject
         return false;
     }
 
-    public void ApplyGravity()
+    public void ApplyGravity(float gravity = 1)
     {
         if (characterController.isGrounded && velocity.y < 0)
         {
@@ -246,7 +246,7 @@ public class PlayerController : OverworldObject
         }
         else
         {
-            velocity.y -= gravityAcceleration * Time.deltaTime;
+            velocity.y -= gravityAcceleration * Time.deltaTime * gravity;
 
             if (velocity.y < -maxFallSpeed)
                 velocity.y = -maxFallSpeed;

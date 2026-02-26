@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class HurtState : PlayerState
 {
-    private float hurtDuration = 1f; // Tiempo que dura el estado de da�o
+    private float hurtDuration = 0.45f; // Tiempo que dura el estado de da�o
     private float timer;
 
     public HurtState(PlayerStateMachine stateMachine, PlayerController controller)
