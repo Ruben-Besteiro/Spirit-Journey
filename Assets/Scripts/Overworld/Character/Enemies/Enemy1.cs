@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -20,6 +21,9 @@ public class Enemy1 : OverworldObject
     [Header("Health")]
     [SerializeField] protected float maxHP = 2;
     protected float currentHP;
+    [SerializeField] GameObject blood;      // Prefab de sangre
+    List<GameObject> bloodSplatters = new();        // Lista de todos los objetos que se generan en cada golpe (después se limpia)
+    List<Vector3> bloodSplatterDirections = new();      // Los vectores de movimiento de cada objeto de sangre
 
     protected Transform playerTransform;
     protected CharacterController controller;
@@ -77,7 +81,7 @@ public class Enemy1 : OverworldObject
             case EnemyStates.Chase:
                 ChaseUpdate();
                 break;
-            case EnemyStates.AttackCooldown:
+            case EnemyStates.Attack:
                 AttackUpdate();
                 break;
         }
@@ -137,7 +141,7 @@ public class Enemy1 : OverworldObject
 
         if (vectorToPlayer.magnitude <= agent.stoppingDistance + .1f)
         {
-            currentState = EnemyStates.AttackCooldown;
+            currentState = EnemyStates.Attack;
             return;
         }
 
@@ -184,7 +188,7 @@ public class Enemy1 : OverworldObject
             if (!other.gameObject.GetComponentInParent<PlayerController>().hasTakenDamageThisFrame)
                 other.gameObject.GetComponentInParent<Damageable>().TakeDamage(new DamageInfo(1, gameObject));
             StartCoroutine(IEKnockback(-transform.forward));      // Aplicamos knockback al enemigo también para que no haya sandwiches
-            currentState = EnemyStates.AttackCooldown;
+            currentState = EnemyStates.Attack;
         }
     }
 
@@ -206,6 +210,19 @@ public class Enemy1 : OverworldObject
         else
         {
             Vector3 damageDir = (transform.position - damaged.source.transform.position).normalized;
+            GetComponent<Renderer>().material.color = Color.red;
+
+            bloodSplatters.Clear();
+            bloodSplatterDirections.Clear();
+            for (int i = 0; i < 300; i++)
+            {
+                bloodSplatters.Add(Instantiate(blood, transform.position, transform.rotation));
+                Vector3 randomOffset = Random.insideUnitSphere * 0.5f; // 0.5f controla cuánta variación
+                Vector3 direction = (damageDir + randomOffset).normalized;
+
+                bloodSplatterDirections.Add(direction);
+            }
+            print(bloodSplatters.Count);
             StartCoroutine(IEKnockback(damageDir));
         }
     }
@@ -213,17 +230,39 @@ public class Enemy1 : OverworldObject
     private IEnumerator IEKnockback(Vector3 dir)
     {
         NavMeshAgent agent = GetComponent<NavMeshAgent>();
+        bool damagedByPlayer = true;
         float knockbackSpeed = 15f;
 
         // Si es el enemigo quien se hace knockback a sí mismo y no el jugador, la velocidad es menor
-        if (!hasTakenDamageThisFrame) knockbackSpeed = 10f;
+        if (!hasTakenDamageThisFrame)
+        {
+            knockbackSpeed = 10f;
+            damagedByPlayer = false;
+        }
 
         while (knockbackSpeed > 0)
         {
             agent.Move(dir * Time.deltaTime * knockbackSpeed);
             knockbackSpeed -= Time.deltaTime * 30f;
+
+            if (damagedByPlayer)
+            {
+                for (int i = 0; i < 300; i++)
+                {
+                    bloodSplatters[i].transform.Translate(bloodSplatterDirections[i], Space.World);
+                    bloodSplatterDirections[i] -= new Vector3(0, 0.005f, 0);        // Simulamos gravedad
+                }
+            }
             yield return null;
         }
-        //agent.SetDestination(playerTransform.position);
+
+        if (damagedByPlayer)
+        {
+            for (int i = 0; i < 300; i++)
+            {
+                Destroy(bloodSplatters[i]);
+            }
+        }
+        GetComponent<Renderer>().material.color = Color.gray;
     }
 }

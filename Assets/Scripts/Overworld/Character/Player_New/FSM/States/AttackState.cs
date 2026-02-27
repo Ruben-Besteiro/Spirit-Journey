@@ -33,7 +33,7 @@ public class AttackState : PlayerState
 
         foreach (Collider c in detectedEnemies)
         {
-            if (!c.CompareTag("Enemy")) continue;
+            if (!c.CompareTag("Enemy") && !c.CompareTag("Bullet")) continue;        // Las balas tambi?n pueden recibir da?o
 
             i = Color.yellow;
 
@@ -43,6 +43,7 @@ public class AttackState : PlayerState
             DamageInfo info = new DamageInfo(damage, controller.gameObject);
             dmg.TakeDamage(info);
         }
+
         DebugBoxDrawer.DrawBox(controller.transform.position + controller.transform.forward * boxCastOffset, new Vector3(boxCastRangeXY, boxCastRangeXY, boxCastRangeZ / 2), controller.transform.rotation, i, 0.5f);
     }
 
@@ -64,11 +65,9 @@ public class AttackState : PlayerState
 
     public override void Update()
     {
-        controller.ApplyGravity(comboTimer/comboWindow);
-
         comboTimer += Time.deltaTime;
 
-        if ( comboTimer >= comboWindow/2)
+        if (comboTimer >= comboWindow / 2)
         {
             if (comboTimer >= comboWindow)
             {
@@ -85,13 +84,13 @@ public class AttackState : PlayerState
     {
         Debug.Log("Attack " + step);
 
-        controller.AnimTrigger("Attack" + step);
+        //controller.AnimTrigger("Attack" + step);
 
         comboTimer = 0;
     }
 
     public override void Exit()
     {
-        
+
     }
 }

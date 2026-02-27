@@ -46,7 +46,7 @@ public class Spawner : OverworldObject
     }
 
 
-    [System.Serializable]       // Esto es obligatorio porque si no lo de abajo no aparece para editarlo en ningún sitio
+    [System.Serializable]       // Poner esto es obligatorio porque si no lo de abajo no aparece para editarlo en ningún sitio
     public class SpawnPhase
     {
         [SerializeField] public GameObject enemyPrefab;

@@ -5,6 +5,11 @@ public class PlayerStateMachine : OverworldObject
     public PlayerState currentState;
     bool active;
 
+    private void Start()
+    {
+        Initialize(new IdleState(this, GetComponent<PlayerController>()));
+    }
+
     public void Initialize(PlayerState startingState)
     {
         currentState = startingState;

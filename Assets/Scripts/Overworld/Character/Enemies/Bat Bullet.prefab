@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4374178783809301780}
   - component: {fileID: 1145105822670444897}
   - component: {fileID: 4678268639891881257}
+  - component: {fileID: 3944240272048666573}
   m_Layer: 0
   m_Name: Bat Bullet
   m_TagString: Bullet
@@ -150,3 +151,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
+  damageable: {fileID: 3944240272048666573}
+--- !u!114 &3944240272048666573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8459196786066291856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4edbfac2e0bda7439a1fd83eb2447b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
