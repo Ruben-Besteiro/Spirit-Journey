@@ -176,6 +176,7 @@ MonoBehaviour:
     m_Bits: 0
   playerDetectDistance: 1e+12
   maxHP: 5
+  blood: {fileID: 6655036430926017566, guid: f328f2677126e974aa035cf2ab1c277b, type: 3}
   bullet: {fileID: 8459196786066291856, guid: 5e2c5eedcebed2c4a876a608ebf0c40e, type: 3}
   damageBox: {fileID: 0}
   hasTakenDamageThisFrame: 0

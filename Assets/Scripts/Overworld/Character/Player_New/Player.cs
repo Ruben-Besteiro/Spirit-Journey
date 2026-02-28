@@ -11,8 +11,8 @@ public class Player : MonoBehaviour
         controller = GetComponent<PlayerController>();
     }
 
-    private void Start()
+    /*private void Start()
     {
-        stateMachine.Initialize(new IdleState(stateMachine, controller));
-    }
+        stateMachine.Initialize();
+    }*/
 }

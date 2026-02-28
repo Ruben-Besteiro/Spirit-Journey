@@ -23,4 +23,5 @@ public class PlayerModeData : ScriptableObject
     public float boxCastRangeXY;
     public float boxCastRangeZ;
     public float boxCastOffset;
+    public float knockback = 15;
 }
