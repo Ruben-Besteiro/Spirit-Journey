@@ -15,4 +15,3 @@ MonoBehaviour:
   categoryName: Music
   audioUnits:
   - {fileID: 11400000, guid: 9e8b97a19774b2c46bf437dbd2077bcb, type: 2}
-  - {fileID: 11400000, guid: d011c54fe8673c8498d8c47e97c1dd6e, type: 2}

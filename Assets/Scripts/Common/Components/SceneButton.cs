@@ -7,6 +7,7 @@ public class SceneButton : MonoBehaviour
 
     public void LoadScene(string LevelName)
     {
+        GameManager.Instance.ResumeGame();
         AudioManager.Instance.PlaySFX3D("UIButton", 0, Camera.main.transform.position);
         GameSceneManager.Instance.LoadScene(LevelName, transitionType, loadingIcon);
     }
