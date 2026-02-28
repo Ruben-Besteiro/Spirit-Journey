@@ -3837,8 +3837,6 @@ MonoBehaviour:
     m_Bits: 64
   wallJumpBackForce: 5
   damageable: {fileID: 144689578}
-  hitAudio: {fileID: 11400000, guid: 5de25b50b5bac4d48a8568e5570c9088, type: 2}
-  missAudio: {fileID: 11400000, guid: 7f4c868b792be314fb7ed470ec7c4e57, type: 2}
   hasDoubleJumped: 0
   isGrounded: 0
   velocity: {x: 0, y: 0, z: 0}

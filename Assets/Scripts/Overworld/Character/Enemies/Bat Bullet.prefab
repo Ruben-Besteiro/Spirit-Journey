@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4374178783809301780}
   - component: {fileID: 1145105822670444897}
   - component: {fileID: 4678268639891881257}
-  - component: {fileID: 8552308888544399150}
+  - component: {fileID: 3944240272048666573}
   m_Layer: 0
   m_Name: Bat Bullet
   m_TagString: Bullet
@@ -151,7 +151,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
---- !u!114 &8552308888544399150
+  damageable: {fileID: 3944240272048666573}
+--- !u!114 &3944240272048666573
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

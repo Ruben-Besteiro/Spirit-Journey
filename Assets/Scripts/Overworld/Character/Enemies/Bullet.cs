@@ -3,15 +3,43 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     [SerializeField] float damage;
-    Damageable damageable;
+    [SerializeField] private Damageable damageable;
+    private DamageInfo damaged;
+
+    void Awake()
+    {
+        if (damageable != null)
+        { damageable = GetComponent<Damageable>(); }
+        damageable.OnDamaged += OnDamageReceived;
+
+        if (damageable == null)
+        { damageable = GetComponent<Damageable>(); }
+        damageable.OnDamaged += TakeDamage;
+
+        print(damageable.ToString());
+    }
+
+    private void OnDestroy()
+    {
+        if (damageable != null)
+           damageable.OnDamaged -= TakeDamage;
+    }
+
+    public void OnDamageReceived(DamageInfo info)
+    {
+        print("Bala: OnDamageReceived");
+        damaged = new DamageInfo(info.amount, info.source);
+    }
+
+    public void TakeDamage(DamageInfo info)
+    {
+        if (damaged.source == null || damaged.source.gameObject.CompareTag("Enemy")) return;
+        Destroy(gameObject);
+    }
 
     private void Start()
     {
-        Destroy(gameObject, 2);
-
-        if (damageable != null)
-        { damageable = GetComponent<Damageable>(); }
-        damageable.OnDamaged += ctx => Destroy(gameObject);
+        //Destroy(gameObject, 2);
     }
 
     private void OnCollisionEnter(Collision other)
