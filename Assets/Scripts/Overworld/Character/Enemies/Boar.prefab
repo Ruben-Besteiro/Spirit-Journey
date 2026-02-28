@@ -192,11 +192,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageable: {fileID: 931878862571578421}
   animator: {fileID: 0}
+  hitVFX: {fileID: 8235772343415592857, guid: 6ef5070a9471d34479d13e0dc66295b6, type: 3}
   groundMask:
     serializedVersion: 2
     m_Bits: 24
   playerDetectDistance: 20
   maxHP: 5
+  bullet: {fileID: 0}
   damageBox: {fileID: 2598597334535170179}
   hasTakenDamageThisFrame: 0
 --- !u!54 &487512552319501060

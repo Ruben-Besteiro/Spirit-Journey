@@ -170,6 +170,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageable: {fileID: 4126229681120773248}
   animator: {fileID: 0}
+  hitVFX: {fileID: 8235772343415592857, guid: 6ef5070a9471d34479d13e0dc66295b6, type: 3}
   groundMask:
     serializedVersion: 2
     m_Bits: 0

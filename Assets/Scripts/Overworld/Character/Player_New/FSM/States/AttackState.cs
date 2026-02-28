@@ -30,12 +30,14 @@ public class AttackState : PlayerState
         detectedEnemies = Physics.OverlapBox(controller.transform.position + controller.transform.forward * boxCastOffset, new Vector3(boxCastRangeXY, boxCastRangeXY, boxCastRangeZ / 2), controller.transform.rotation);
 
         Color i = Color.red;
+        AudioUnit_SO audio = controller.missAudio;
 
         foreach (Collider c in detectedEnemies)
         {
             if (!c.CompareTag("Enemy")) continue;
 
             i = Color.yellow;
+            audio = controller.hitAudio; 
 
             Damageable dmg = c.gameObject.GetComponentInParent<Damageable>();
             if (dmg == null || c.gameObject.CompareTag("Player")) continue;
@@ -43,6 +45,7 @@ public class AttackState : PlayerState
             DamageInfo info = new DamageInfo(damage, controller.gameObject);
             dmg.TakeDamage(info);
         }
+        AudioManager.Instance.PlaySFX3D(audio, controller.transform.position);
         DebugBoxDrawer.DrawBox(controller.transform.position + controller.transform.forward * boxCastOffset, new Vector3(boxCastRangeXY, boxCastRangeXY, boxCastRangeZ / 2), controller.transform.rotation, i, 0.5f);
     }
 

@@ -3,10 +3,15 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     [SerializeField] float damage;
+    Damageable damageable;
 
     private void Start()
     {
         Destroy(gameObject, 2);
+
+        if (damageable != null)
+        { damageable = GetComponent<Damageable>(); }
+        damageable.OnDamaged += ctx => Destroy(gameObject);
     }
 
     private void OnCollisionEnter(Collision other)

@@ -29,6 +29,7 @@ public class MenuManager : MonoBehaviour
         panelFinalPos = panelRect.anchoredPosition;
 
         pausePanel.SetActive(false);
+        GameManager.Instance.ResumeGame();
         LockCursor();
     }
 

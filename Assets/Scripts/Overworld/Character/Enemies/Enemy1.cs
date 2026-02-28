@@ -12,6 +12,7 @@ public class Enemy1 : OverworldObject
 
     [Header("Animation")]
     [SerializeField] protected Animator animator;
+    [SerializeField] private ParticleSystem hitVFX;
 
     [Header("Detection")]
     [SerializeField] protected LayerMask groundMask;
@@ -196,8 +197,8 @@ public class Enemy1 : OverworldObject
 
         // Hacer el daño
         currentHP -= damaged.amount;
-        //Debug.Log("Enemy damaged by " + info.source.name + " -> " + currentHP + " remaining");
 
+        SpawnHitVFX(info);
         if (currentHP <= 0)
         {
             GameManager.Instance.kills++;
@@ -208,6 +209,16 @@ public class Enemy1 : OverworldObject
             Vector3 damageDir = (transform.position - damaged.source.transform.position).normalized;
             StartCoroutine(IEKnockback(damageDir));
         }
+    }
+
+    private void SpawnHitVFX(DamageInfo info)
+    {
+        if (hitVFX == null) return;
+        Vector3 dir = (transform.position - info.source.transform.position).normalized;
+        Quaternion rot = Quaternion.LookRotation(dir);
+        ParticleSystem vfx = Instantiate(hitVFX, transform.position, rot);
+
+        Destroy(vfx.gameObject, vfx.main.duration);
     }
 
     private IEnumerator IEKnockback(Vector3 dir)

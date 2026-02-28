@@ -49,6 +49,10 @@ public class PlayerController : OverworldObject
     [Header("Combat")]
     [SerializeField] private Damageable damageable;
 
+    [Header("Audio")]
+    public AudioUnit_SO hitAudio;
+    public AudioUnit_SO missAudio;
+
     [HideInInspector] public DamageInfo damaged;
     [HideInInspector] public bool hasDoubleJumped;
     [HideInInspector] public bool isGrounded;
