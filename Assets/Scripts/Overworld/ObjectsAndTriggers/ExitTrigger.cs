@@ -18,7 +18,7 @@ public class ExitTrigger : MonoBehaviour
         GameManager gm = GameManager.Instance;
 
         gm.timerEnabled = false;
-        print("¡GG! " + gm.timer + " " + gm.kills);
+        print("GG! " + gm.remainingTime + " " + gm.kills);
         yield return new WaitForSeconds(2);
         GameSceneManager.Instance.LoadScene(SceneManager.GetActiveScene().name, SceneTransition.FadeBlack, false);
     }

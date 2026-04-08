@@ -65,6 +65,7 @@ public class AttackState : PlayerState
 
     public override void Update()
     {
+        controller.ApplyGravity();
         comboTimer += Time.deltaTime;
 
         if (comboTimer >= comboWindow / 2)

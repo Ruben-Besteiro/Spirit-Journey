@@ -22,7 +22,7 @@ public class Enemy1 : OverworldObject
     [SerializeField] protected float maxHP = 2;
     protected float currentHP;
     [SerializeField] GameObject blood;      // Prefab de sangre
-    List<GameObject> bloodSplatters = new();        // Lista de todos los objetos que se generan en cada golpe (después se limpia)
+    List<GameObject> bloodSplatters = new();        // Lista de todos los objetos que se generan en cada golpe (despuï¿½s se limpia)
     List<Vector3> bloodSplatterDirections = new();      // Los vectores de movimiento de cada objeto de sangre
 
     protected Transform playerTransform;
@@ -118,15 +118,15 @@ public class Enemy1 : OverworldObject
             {
                 Debug.DrawRay(transform.position, vectorToPlayer.normalized * playerDetectDistance, Color.red);
             }
-            //print(gameObject.name + " Se encontró " + hit.collider.gameObject.name + " " + hit.collider.gameObject.tag);
+            //print(gameObject.name + " Se encontrï¿½ " + hit.collider.gameObject.name + " " + hit.collider.gameObject.tag);
 
             break;
         }
 
-        // Failsafe si por alguna razón el raycast que apunta al jugador no detecta al jugador
+        // Failsafe si por alguna razï¿½n el raycast que apunta al jugador no detecta al jugador
         if (hits.Length == 0)
         {
-            print(gameObject.name + " No se encontró nada");
+            print(gameObject.name + " No se encontrï¿½ nada");
             currentState = EnemyStates.Chase;
         }
     }
@@ -187,7 +187,7 @@ public class Enemy1 : OverworldObject
         {
             if (!other.gameObject.GetComponentInParent<PlayerController>().hasTakenDamageThisFrame)
                 other.gameObject.GetComponentInParent<Damageable>().TakeDamage(new DamageInfo(1, gameObject));
-            StartCoroutine(IEKnockback(-transform.forward));      // Aplicamos knockback al enemigo también para que no haya sandwiches
+            StartCoroutine(IEKnockback(-transform.forward));      // Aplicamos knockback al enemigo tambiï¿½n para que no haya sandwiches
             currentState = EnemyStates.Attack;
         }
     }
@@ -198,18 +198,20 @@ public class Enemy1 : OverworldObject
         hasTakenDamageThisFrame = true;
         if (damaged.source == null || damaged.source.gameObject.CompareTag("Enemy")) return;
 
-        // Hacer el daño
+        // Hacer el daï¿½o
         currentHP -= damaged.amount;
         //Debug.Log("Enemy damaged by " + info.source.name + " -> " + currentHP + " remaining");
 
         if (currentHP <= 0)
         {
             GameManager.Instance.kills++;
+            GameManager.Instance.killsRemainingText.text = (GameManager.Instance.killsToWin - GameManager.Instance.kills).ToString();
             Destroy(gameObject);
         }
         else
         {
             Vector3 damageDir = (transform.position - damaged.source.transform.position).normalized;
+            damageDir.y = 0;
             GetComponent<Renderer>().material.color = Color.red;
 
             bloodSplatters.Clear();
@@ -217,7 +219,7 @@ public class Enemy1 : OverworldObject
             for (int i = 0; i < 300; i++)
             {
                 bloodSplatters.Add(Instantiate(blood, transform.position, transform.rotation));
-                Vector3 randomOffset = Random.insideUnitSphere * 0.5f; // 0.5f controla cuánta variación
+                Vector3 randomOffset = Random.insideUnitSphere * 0.5f; // 0.5f controla cuï¿½nta variaciï¿½n
                 Vector3 direction = (damageDir + randomOffset).normalized;
 
                 bloodSplatterDirections.Add(direction);
@@ -233,7 +235,7 @@ public class Enemy1 : OverworldObject
         bool damagedByPlayer = true;
         float knockbackSpeed = 15f;
 
-        // Si es el enemigo quien se hace knockback a sí mismo y no el jugador, la velocidad es menor
+        // Si es el enemigo quien se hace knockback a sï¿½ mismo y no el jugador, la velocidad es menor
         if (!hasTakenDamageThisFrame)
         {
             knockbackSpeed = 10f;

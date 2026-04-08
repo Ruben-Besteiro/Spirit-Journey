@@ -27,9 +27,8 @@ public class IdleState : PlayerState
         {
             stateMachine.ChangeState(new JumpState(stateMachine, controller));
         }
-
-        // Detecta cosas constantemente aunque no haya ningún enemigo
-        if (Physics.OverlapSphere(controller.transform.position, controller.attackRange, LayerMask.GetMask("Enemy")).Length > 0)
+        
+        if (Physics.OverlapSphere(controller.transform.position + controller.transform.forward, controller.attackRange, LayerMask.GetMask("Enemy")).Length > 0)
         {
             foreach (Collider enemy in Physics.OverlapSphere(controller.transform.position, controller.attackRange, LayerMask.GetMask("Enemy")))
             {

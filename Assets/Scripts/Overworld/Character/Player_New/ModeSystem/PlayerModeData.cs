@@ -3,9 +3,12 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Player/Modes/New Mode")]
 public class PlayerModeData : ScriptableObject
 {
+    [Header("Upgrade Data")]
+    [SerializeField] public CharacterUpgradeData upgradeData;
+
     [Header("Stat Modifiers")]
-    public float moveSpeedMultiplier = 1f;
-    public float jumpForceMultiplier = 1f;
+    public float moveSpeedMultiplier = 1f; // + upgradeData.speedStage * 0.5f;
+    public float jumpForceMultiplier = 1f; // + upgradeData.speedStage * 0.5f;
     internal float staminaDrainPerSecond = 10f;
 
     [Header("Visual")]
@@ -19,9 +22,9 @@ public class PlayerModeData : ScriptableObject
     public bool canDoubleJump;
 
     [Header("Combat")]
-    public float damageMultiplier = 1f;
-    public float boxCastRangeXY;
-    public float boxCastRangeZ;
-    public float boxCastOffset;
-    public float knockback = 15;
+    public float damageMultiplier = 1f; // + upgradeData.damageStage * 0.5f;
+    public float boxCastRangeXY = 1f; // + upgradeData.rangeStage * 0.5f;
+    public float boxCastRangeZ = 1f; // + upgradeData.rangeStage * 0.5f;
+    public float boxCastOffset = 1f; // + upgradeData.rangeStage * 0.5f;
+    public float knockback = 15f; // + upgradeData.damageStage * 5f;
 }

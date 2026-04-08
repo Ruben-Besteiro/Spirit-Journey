@@ -47,7 +47,6 @@ public class PlayerController : OverworldObject
     public float wallJumpBackForce = 5f;
 
     [Header("Combat")]
-    [SerializeField] public Collider realHitbox;
     [SerializeField] public float attackRange = 1f;     // Esto será editable cuando le demos a mejorar
     
     [SerializeField] private Damageable damageable;
@@ -232,7 +231,7 @@ public class PlayerController : OverworldObject
             {
                 hit = frontHit;
                 currentWallNormal = frontHit.normal;
-                Debug.Log($"Pared frontal: {frontHit.collider.name}, �ngulo: {angle:F1}�");
+                Debug.Log($"Pared frontal: {frontHit.collider.name},  ngulo: {angle:F1} ");
                 return true;
             }
         }
@@ -299,7 +298,7 @@ public class PlayerController : OverworldObject
         //Knockback
         if (damaged.source != null)
         {
-            // Hacer el da�o
+            // Hacer el da o
             currentHP -= damaged.amount;
             Debug.Log("Player damaged " + currentHP);
             Vector3 damageDir = (transform.position - damaged.source.transform.position).normalized;
@@ -320,7 +319,7 @@ public class PlayerController : OverworldObject
     }
 
 
-    // Movemos al jugador en la direcci�n del golpe para evitar softlocks
+    // Movemos al jugador en la direcci n del golpe para evitar softlocks
     public void Knockback(Vector3 dir)
     {
         float knockbackSpeed = 25;

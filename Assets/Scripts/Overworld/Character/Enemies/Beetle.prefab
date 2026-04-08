@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9120925178328532866}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Beetle Shoot Position
   m_TagString: Trigger
   m_Icon: {fileID: 0}
@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 5125726642667730648}
   - component: {fileID: 5463711950193081736}
   - component: {fileID: 5534220317180968633}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Beetle
   m_TagString: Enemy
   m_Icon: {fileID: 0}

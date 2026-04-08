@@ -28,15 +28,15 @@ public class PlayerModeRuntime
     }
 
     public float ModifyMoveSpeed(float baseValue)
-        => baseValue * data.moveSpeedMultiplier;
+        => baseValue * (data.moveSpeedMultiplier + data.upgradeData.speedStage * 0.5f);
 
     public float ModifyJumpForce(float baseValue)
-        => baseValue * data.jumpForceMultiplier;
+        => baseValue * (data.jumpForceMultiplier + data.upgradeData.speedStage * 0.5f);
 
     public bool CanWallJump() => data.canWallJump;
     public bool CanWallClimb() => data.canWallClimb;
     public bool CanDoubleJump() => data.canDoubleJump;
 
     public float ModifyDamage(float baseDamage)
-        => baseDamage * data.damageMultiplier;
+        => baseDamage * (data.damageMultiplier + data.upgradeData.damageStage * 0.5f);
 }

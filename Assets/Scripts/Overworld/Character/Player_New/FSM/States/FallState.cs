@@ -23,8 +23,10 @@ public class FallState : PlayerState
         if (controller.GetComponent<CharacterController>().isGrounded)
             stateMachine.ChangeState(new IdleState(stateMachine, controller));
 
-        if (controller.AttackPressed)
+        if (Physics.OverlapSphere(controller.transform.position + controller.transform.forward, controller.attackRange, LayerMask.GetMask("Enemy")).Length > 0)
+        {
             stateMachine.ChangeState(new AttackState(stateMachine, controller));
+        }
 
         HandleAirAbilities();
     }

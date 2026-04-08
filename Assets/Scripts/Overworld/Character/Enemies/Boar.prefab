@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7743596336261479240}
   - component: {fileID: 2598597334535170179}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Damage Box
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -68,7 +68,7 @@ GameObject:
   - component: {fileID: 931878862571578421}
   - component: {fileID: 1094708299007710522}
   - component: {fileID: 487512552319501060}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Boar
   m_TagString: Enemy
   m_Icon: {fileID: 0}

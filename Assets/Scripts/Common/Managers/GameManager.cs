@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,12 +16,16 @@ public class GameManager : MonoBehaviour
     private SaveData data;
     private List<ISaveable> saveableObjects;
 
-    public float timer = 0;
+    private float maxTime = 30;
+    public float remainingTime;
     public bool timerEnabled;
+    public int killsToWin = 5;
     public int kills = 0;
 
-    private bool isPaused = false;
+    [SerializeField] public TextMeshProUGUI timerText;
+    [SerializeField] public TextMeshProUGUI killsRemainingText;
 
+    private bool isPaused = false;
     public bool IsPaused => isPaused;
 
     private void Awake()
@@ -28,7 +33,7 @@ public class GameManager : MonoBehaviour
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
 
         // Configurar la ruta
         rutaCompleta = Path.Combine(Application.persistentDataPath, "SaveData.sav");
@@ -40,8 +45,10 @@ public class GameManager : MonoBehaviour
         }
         catch (Exception)
         {
-            // Si no se tiene permisos para crear la carpeta entonces se juega sin guardar y ya está
+            // Si no se tiene permisos para crear la carpeta entonces se juega sin guardar y ya est
         }
+
+        remainingTime = maxTime;
     }
 
     private void Start()
@@ -53,12 +60,16 @@ public class GameManager : MonoBehaviour
             obj.LoadData(data);
         }
 
-        timerEnabled = true;        // Esto es obligatorio ponerlo aquí y no arriba porque si no no va
+        timerEnabled = true;        // Esto es obligatorio ponerlo aquï¿½ y no arriba porque si no no va
     }
 
     private void Update()
     {
-        if (timerEnabled) timer += Time.deltaTime;
+        if (timerEnabled)
+        {
+            remainingTime -= Time.deltaTime;
+            timerText.text = remainingTime.ToString("F2");
+        }
     }
 
     /* PAUSE SYSTEM */

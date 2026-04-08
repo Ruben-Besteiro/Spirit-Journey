@@ -40,9 +40,7 @@ public class GameSceneManager : MonoBehaviour
     public void LoadScene(string sceneName, SceneTransition transition, bool showLoadingIcon)
     {
         GameManager gm = GameManager.Instance;
-        gm.timer = 0;
         gm.timerEnabled = true;
-        gm.kills = 0;
 
         if (transition == SceneTransition.Instant)
         {
