@@ -28,8 +28,17 @@ public class IdleState : PlayerState
             stateMachine.ChangeState(new JumpState(stateMachine, controller));
         }
 
-        if (controller.AttackPressed)
+        // Detecta cosas constantemente aunque no haya ningún enemigo
+        if (Physics.OverlapSphere(controller.transform.position, controller.attackRange, LayerMask.GetMask("Enemy")).Length > 0)
         {
+            foreach (Collider enemy in Physics.OverlapSphere(controller.transform.position, controller.attackRange, LayerMask.GetMask("Enemy")))
+            {
+                Debug.Log(enemy.name);
+                /*if (enemy.TryGetComponent<Damageable>(out Damageable damageable))
+                {
+                    damageable.TakeDamage(new DamageInfo(1, controller.gameObject));
+                }*/
+            }
             stateMachine.ChangeState(new AttackState(stateMachine, controller));
         }
     }
