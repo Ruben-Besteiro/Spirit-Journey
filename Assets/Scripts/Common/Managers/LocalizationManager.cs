@@ -19,7 +19,6 @@ public class LocalizationManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     public static string Get(string key)

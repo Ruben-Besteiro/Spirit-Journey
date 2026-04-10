@@ -18,6 +18,8 @@ public class PlayerModeHUD : MonoBehaviour
 
     private void Start()
     {
+        print("Character: " + GameDataManager.Instance.selectedCharacter);
+
         if (manager == null || controller == null)
         {
             Debug.LogWarning("HUD has no PlayerModeManager or PlayerController assigned.");
@@ -70,9 +72,10 @@ public class PlayerModeHUD : MonoBehaviour
 
     private void InitializeHUD()
     {
-        UpdateSelection(0);
+        //UpdateSelection(0);
         UpdateStamina(manager.CurrentStamina, manager.MaxStamina);
     }
+
     private void UpdateSelection(int selectedIndex)
     {
         for (int i = 0; i < modeIcons.Count; i++)
@@ -83,17 +86,20 @@ public class PlayerModeHUD : MonoBehaviour
                 modeIcons[i].color = Color.gray;
         }
     }
+
     private void UpdateActivation(PlayerModeRuntime activeMode)
     {
-        int index = manager.GetSelectedIndex();
+        int index = GameDataManager.Instance.selectedCharacter;
         modeIcons[index].sprite = activeMode.data.activeSprite;
     }
+
     private void ClearActivation()
     {
         List<PlayerModeData> modes = manager.GetAvailableModes();
         for (int i = 0; i < modes.Count || i < modeIcons.Count; i++)
         { modeIcons[i].sprite = modes[i].inactiveSprite; }
     }
+
     private void UpdateStamina(float current, float max)
     {
         staminaFillImage.fillAmount = current / max;

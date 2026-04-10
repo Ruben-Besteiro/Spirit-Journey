@@ -4,6 +4,8 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,14 +18,18 @@ public class GameManager : MonoBehaviour
     private SaveData data;
     private List<ISaveable> saveableObjects;
 
-    private float maxTime = 30;
+    [SerializeField] private float maxTime;
     public float remainingTime;
-    public bool timerEnabled;
+    public bool timerEnabled = true;
     public int killsToWin = 5;
     public int kills = 0;
 
     [SerializeField] public TextMeshProUGUI timerText;
     [SerializeField] public TextMeshProUGUI killsRemainingText;
+
+    [SerializeField] private Canvas resultsCanvas;
+    [SerializeField] private TextMeshProUGUI wonOrLostText;
+    [SerializeField] private TextMeshProUGUI plusMoneyText;
 
     private bool isPaused = false;
     public bool IsPaused => isPaused;
@@ -60,7 +66,17 @@ public class GameManager : MonoBehaviour
             obj.LoadData(data);
         }
 
-        timerEnabled = true;        // Esto es obligatorio ponerlo aqu� y no arriba porque si no no va
+        timerEnabled = true;        // Esto es obligatorio ponerlo aqu y no arriba porque si no no va
+ 
+        try
+        {
+            timerText = GameObject.Find("TimerText").GetComponent<TextMeshProUGUI>();
+            killsRemainingText = GameObject.Find("KillsRemainingText").GetComponent<TextMeshProUGUI>();
+        }
+        catch (Exception)
+        {
+            print("No hay textos en la escena" + SceneManager.GetActiveScene().name);
+        }
     }
 
     private void Update()
@@ -69,6 +85,14 @@ public class GameManager : MonoBehaviour
         {
             remainingTime -= Time.deltaTime;
             timerText.text = remainingTime.ToString("F2");
+
+            if (remainingTime <= 0)
+            {
+                timerEnabled = false;
+                remainingTime = 0;
+                timerText.text = remainingTime.ToString("F2");
+                StartCoroutine(WonOrLost(false));
+            }
         }
     }
 
@@ -103,6 +127,7 @@ public class GameManager : MonoBehaviour
             PauseGame();
     }
 
+    // Todo esto ahora mismo no se utiliza
     private List<ISaveable> FindAllSaveableObjects()
     {
         var foundSaveableObjects = FindObjectsByType(
@@ -177,5 +202,17 @@ public class GameManager : MonoBehaviour
         }
 
         return loadedData;
+    }
+
+    public IEnumerator WonOrLost(bool won)
+    {
+        PauseGame();
+        resultsCanvas.gameObject.SetActive(true);
+        wonOrLostText.text = won ? "Has ganado" : "Has perdido";
+        wonOrLostText.color = won ? Color.green : Color.red;
+        plusMoneyText.text = won ? "+100" : "+0";
+        plusMoneyText.color = won ? Color.white : Color.yellow;
+        yield return new WaitForSeconds(1.5f);
+        GameSceneManager.Instance.LoadScene("TitleScreen", SceneTransition.FadeBlack, false);
     }
 }

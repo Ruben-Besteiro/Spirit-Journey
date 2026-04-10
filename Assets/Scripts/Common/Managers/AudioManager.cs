@@ -26,7 +26,6 @@ public class AudioManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     public float GetMusicVolume() => DbToLinear(MUSIC_VOL);

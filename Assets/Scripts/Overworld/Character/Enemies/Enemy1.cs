@@ -206,6 +206,8 @@ public class Enemy1 : OverworldObject
         {
             GameManager.Instance.kills++;
             GameManager.Instance.killsRemainingText.text = (GameManager.Instance.killsToWin - GameManager.Instance.kills).ToString();
+            if (GameManager.Instance.kills >= GameManager.Instance.killsToWin)
+                StartCoroutine(GameManager.Instance.WonOrLost(true));
             Destroy(gameObject);
         }
         else

@@ -7,11 +7,11 @@ public class PlayerModeManager : MonoBehaviour, ISaveable
     public List<PlayerModeData> availableModes;
     private List<PlayerModeRuntime> runtimeModes = new();
     public PlayerModeRuntime currentRuntimeMode;
-    private int selectedIndex = 0;
+    //private int selectedIndex = 0;    //La transformación la elegimos antes de empezar (GameDataManager)
 
     [SerializeField] private PlayerModeData defaultMode;
     private PlayerModeRuntime defaultRuntimeMode;
-    public int GetSelectedIndex() => selectedIndex;
+    //public int GetSelectedIndex() => selectedIndex;
 
 
     [Header("Stamina")]
@@ -78,16 +78,16 @@ public class PlayerModeManager : MonoBehaviour, ISaveable
         }
     }
 
-    // Si las bendiciones se desbloquean de forma lineal
-    public void SelectNextMode()
+    // Estos 2 métodos actualmente no se utilizan
+    /*public void SelectNextMode()
     {
         if (runtimeModes.Count == 0) return;
 
-        /*do
-        {*/
+        do
+        {
             selectedIndex++;
             if (selectedIndex >= availableModes.Count) selectedIndex = 0;
-        /* }while (!unlockedBenditions[selectedIndex]);*/
+        }while (!unlockedBenditions[selectedIndex]);
 
         OnModeSelectionChanged?.Invoke(selectedIndex);
         DeactivateActiveMode();
@@ -99,15 +99,15 @@ public class PlayerModeManager : MonoBehaviour, ISaveable
         if (runtimeModes.Count == 0) return;
 
         /*do
-        {*/
+        {
             selectedIndex--;
         if (selectedIndex < 0) { selectedIndex = availableModes.Count - 1; }
-        /*} while (!unlockedBenditions[selectedIndex]);*/
+        /*} while (!unlockedBenditions[selectedIndex]);
 
         OnModeSelectionChanged?.Invoke(selectedIndex);
         DeactivateActiveMode();
         Debug.LogWarning("ID: "+selectedIndex+", "+ availableModes.Count);
-    }
+    }*/
 
     // -- Activar modos --
 
@@ -115,7 +115,9 @@ public class PlayerModeManager : MonoBehaviour, ISaveable
     {
         if (runtimeModes.Count == 0) return;
 
-        var selectedMode = runtimeModes[selectedIndex];
+        print("Character: " + GameDataManager.Instance.selectedCharacter);
+        var selectedMode = runtimeModes[GameDataManager.Instance.selectedCharacter];
+        print("Te has transformado en: " + selectedMode.data.name);
 
         if (currentRuntimeMode == selectedMode)
         {
@@ -151,7 +153,7 @@ public class PlayerModeManager : MonoBehaviour, ISaveable
         return availableModes;
     }
 
-    // -- Funciones p�blicas --
+    // -- Funciones p�blicas --
 
     public float ModifyMoveSpeed(float baseValue)
         => currentRuntimeMode.IsActive == true ? currentRuntimeMode.ModifyMoveSpeed(baseValue) : baseValue;

@@ -28,7 +28,6 @@ public class GameSceneManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
 
         fadePanel.gameObject.SetActive(false);
         fadePanel.color = new Color(0, 0, 0, 0);
@@ -40,7 +39,7 @@ public class GameSceneManager : MonoBehaviour
     public void LoadScene(string sceneName, SceneTransition transition, bool showLoadingIcon)
     {
         GameManager gm = GameManager.Instance;
-        gm.timerEnabled = true;
+        if (gm) gm.timerEnabled = true;
 
         if (transition == SceneTransition.Instant)
         {

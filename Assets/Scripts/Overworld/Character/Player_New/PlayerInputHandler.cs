@@ -24,8 +24,8 @@ public class PlayerInputHandler : MonoBehaviour
         input.Player.Attack.started += ctx => OnAttack(ctx);
         input.Player.Attack.canceled += ctx => OnAttack(ctx);
         input.Player.Pause.started += ctx => OnPause();
-        input.Player.Previous.started += ctx => modeManager.SelectPreviousMode();
-        input.Player.Next.started += ctx => modeManager.SelectNextMode();
+        /*input.Player.Previous.started += ctx => modeManager.SelectPreviousMode();
+        input.Player.Next.started += ctx => modeManager.SelectNextMode();*/
         input.Player.Transform.started += ctx => modeManager.ToggleSelectedMode();
     }
     private void OnEnable()

@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class GameDataManager : MonoBehaviour
 {
@@ -7,9 +9,10 @@ public class GameDataManager : MonoBehaviour
 
     public static GameDataManager Instance;
 
-    [SerializeField] public int money = 0;
+    [SerializeField] public float money = 0;
     [SerializeField] public CharacterUpgradeData foxUpgrades;
     [SerializeField] public CharacterUpgradeData lizardUpgrades;
+    [SerializeField] public int selectedCharacter = 0;      // El ID de la transformación que escogimos
 
     private void Awake()
     {
@@ -17,5 +20,18 @@ public class GameDataManager : MonoBehaviour
         else Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
+    }
+
+    private void Start()
+    {
+        print("Escena " + SceneManager.GetActiveScene().name + ": Tienes " + money + " de dinero");
+    }
+
+    private void Update()
+    {
+        if (Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            Debug.Log("Click detectado por DebugInput");
+        }
     }
 }

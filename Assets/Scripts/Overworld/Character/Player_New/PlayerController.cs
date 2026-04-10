@@ -304,20 +304,9 @@ public class PlayerController : OverworldObject
             Vector3 damageDir = (transform.position - damaged.source.transform.position).normalized;
             if (!damaged.source.gameObject.CompareTag("Bullet")) Knockback(damageDir);
 
-            if (currentHP <= 0) GameSceneManager.Instance.LoadScene(SceneManager.GetActiveScene().name, SceneTransition.FadeBlack, false);
+            if (currentHP <= 0) StartCoroutine(GameManager.Instance.WonOrLost(false));
         }
     }
-
-    //-- Pausa --
-    protected override void OnGamePaused()
-    {
-        //animator.speed = 0f;
-    }
-    protected override void OnGameResumed()
-    {
-        //animator.speed = 1;
-    }
-
 
     // Movemos al jugador en la direcci n del golpe para evitar softlocks
     public void Knockback(Vector3 dir)
