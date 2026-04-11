@@ -41,7 +41,7 @@ public class DialogueManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
 
         panelRect = dialoguePanel.GetComponent<RectTransform>();
         panelFinalPos = panelRect.anchoredPosition;
@@ -49,7 +49,7 @@ public class DialogueManager : MonoBehaviour
         dialoguePanel.SetActive(false);
     }
 
-    /* Públic API */
+    /* Pï¿½blic API */
 
     public void StartDialogue(DialogueData_SO dialogue)
     {

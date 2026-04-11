@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float maxTime;
     public float remainingTime;
     public bool timerEnabled = true;
-    public int killsToWin = 5;
+    public int killsToWin = 10;
     public int kills = 0;
 
     [SerializeField] public TextMeshProUGUI timerText;
@@ -68,15 +68,10 @@ public class GameManager : MonoBehaviour
 
         timerEnabled = true;        // Esto es obligatorio ponerlo aqu y no arriba porque si no no va
  
-        try
-        {
-            timerText = GameObject.Find("TimerText").GetComponent<TextMeshProUGUI>();
-            killsRemainingText = GameObject.Find("KillsRemainingText").GetComponent<TextMeshProUGUI>();
-        }
-        catch (Exception)
-        {
-            print("No hay textos en la escena" + SceneManager.GetActiveScene().name);
-        }
+        timerText = GameObject.Find("Time Text").GetComponent<TextMeshProUGUI>();
+        timerText.text = maxTime.ToString("F2");
+        killsRemainingText = GameObject.Find("Kills Remaining Text").GetComponent<TextMeshProUGUI>();
+        killsRemainingText.text = killsToWin.ToString();
     }
 
     private void Update()
@@ -91,7 +86,7 @@ public class GameManager : MonoBehaviour
                 timerEnabled = false;
                 remainingTime = 0;
                 timerText.text = remainingTime.ToString("F2");
-                StartCoroutine(WonOrLost(false));
+                WonOrLost(false);
             }
         }
     }
@@ -204,15 +199,16 @@ public class GameManager : MonoBehaviour
         return loadedData;
     }
 
-    public IEnumerator WonOrLost(bool won)
+    public void WonOrLost(bool won)
     {
         PauseGame();
         resultsCanvas.gameObject.SetActive(true);
         wonOrLostText.text = won ? "Has ganado" : "Has perdido";
         wonOrLostText.color = won ? Color.green : Color.red;
-        plusMoneyText.text = won ? "+100" : "+0";
+        int wonMoney = won ? (int)(remainingTime * 10) : 0;
+        plusMoneyText.text = "+" + wonMoney.ToString();
         plusMoneyText.color = won ? Color.white : Color.yellow;
-        yield return new WaitForSeconds(1.5f);
+        GameDataManager.Instance.money += wonMoney;
         GameSceneManager.Instance.LoadScene("TitleScreen", SceneTransition.FadeBlack, false);
     }
 }

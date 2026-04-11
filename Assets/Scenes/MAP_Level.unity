@@ -23595,7 +23595,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 30
+  m_text: 'New Text
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -33421,19 +33423,19 @@ MonoBehaviour:
   - {fileID: 1255179718}
   phases:
   - enemyPrefab: {fileID: 5461994548723159906, guid: 7cbc2350a6f60304c8351f97ab1f4d98, type: 3}
-    spawnInterval: 4
-    minSpawnInterval: 2
-    spawnTimeIncrement: 0.2
+    spawnInterval: 2
+    minSpawnInterval: 1
+    spawnTimeIncrement: 0.1
     startingTime: 0
   - enemyPrefab: {fileID: 1972524562187983927, guid: 6a22ae9772555f345a0c03dc1eaee35d, type: 3}
-    spawnInterval: 4
-    minSpawnInterval: 2
-    spawnTimeIncrement: 0.3
+    spawnInterval: 2
+    minSpawnInterval: 1
+    spawnTimeIncrement: 0.15
     startingTime: 0
   - enemyPrefab: {fileID: 6827430371851852206, guid: 2f4171885344d1e44b18a5fb06b506cc, type: 3}
-    spawnInterval: 4
-    minSpawnInterval: 2
-    spawnTimeIncrement: 0.4
+    spawnInterval: 2
+    minSpawnInterval: 1
+    spawnTimeIncrement: 0.2
     startingTime: 0
   enemiesPerPhase: 5
   player: {fileID: 144689582}
@@ -38331,7 +38333,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '5
+  m_text: 'New Text
 
 '
   m_isRightToLeft: 0
@@ -39407,6 +39409,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 775333382}
     - target: {fileID: 340524607276838107, guid: 4437ae976e380574b8794ef84ea89f38, type: 3}
+      propertyPath: killsToWin
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 340524607276838107, guid: 4437ae976e380574b8794ef84ea89f38, type: 3}
       propertyPath: timerEnabled
       value: 1
       objectReference: {fileID: 0}
@@ -40214,7 +40220,7 @@ GameObject:
   - component: {fileID: 1793035466}
   - component: {fileID: 1793035469}
   m_Layer: 7
-  m_Name: Capsule
+  m_Name: Player Capsule
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

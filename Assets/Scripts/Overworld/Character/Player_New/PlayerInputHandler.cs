@@ -21,8 +21,8 @@ public class PlayerInputHandler : MonoBehaviour
         input.Player.Move.canceled += ctx => OnMove(Vector2.zero);
         input.Player.Jump.started += ctx => OnJump(ctx);
         input.Player.Jump.canceled += ctx => OnJump(ctx);
-        input.Player.Attack.started += ctx => OnAttack(ctx);
-        input.Player.Attack.canceled += ctx => OnAttack(ctx);
+        /*input.Player.Attack.started += ctx => OnAttack(ctx);
+        input.Player.Attack.canceled += ctx => OnAttack(ctx);*/
         input.Player.Pause.started += ctx => OnPause();
         /*input.Player.Previous.started += ctx => modeManager.SelectPreviousMode();
         input.Player.Next.started += ctx => modeManager.SelectNextMode();*/
@@ -52,14 +52,14 @@ public class PlayerInputHandler : MonoBehaviour
             controller.JumpPressed = false;
     }
 
-    public void OnAttack(InputAction.CallbackContext context)
+    /*public void OnAttack(InputAction.CallbackContext context)
     {
         if (context.started)
             controller.AttackPressed = true;
 
         if (context.canceled)
             controller.AttackPressed = false;
-    }
+    }*/
 
     private void OnPause()
     {

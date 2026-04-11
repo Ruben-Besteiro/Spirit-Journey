@@ -18,6 +18,8 @@ public class AttackState : PlayerState
 
     public override void Enter()
     {
+        // El jugador pega él solo (no hace falta darle al ratón)
+
         var transformation = controller.GetComponent<PlayerModeManager>().currentRuntimeMode.data;
         boxCastRangeXY = transformation.boxCastRangeXY;
         boxCastRangeZ = transformation.boxCastRangeZ;

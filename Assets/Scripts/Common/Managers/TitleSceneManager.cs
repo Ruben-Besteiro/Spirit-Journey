@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System;
+using UnityEngine.InputSystem;
 
 public class TitleSceneManager : MonoBehaviour
 {
@@ -22,6 +23,11 @@ public class TitleSceneManager : MonoBehaviour
     private void Start()
     {
         StartCoroutine(UpdateMoneyText());
+
+        // Desactivar bloqueo del cursor de la escena anterior
+        // De lo contrario, los botones dejan de ir
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     public void PickCharacter()
@@ -30,14 +36,14 @@ public class TitleSceneManager : MonoBehaviour
         pickCharacterCanvas.SetActive(true);
     }
 
-    public void LoadLevelFox()
+    public void SelectFox()
     {
         GameDataManager.Instance.selectedCharacter = 0;
         print("Cargando escena...");
         GameSceneManager.Instance.LoadScene("MAP_Level", SceneTransition.FadeBlack, false);
     }
 
-    public void LoadLevelLizard()
+    public void SelectLizard()
     {
         GameDataManager.Instance.selectedCharacter = 1;
         print("Cargando escena...");

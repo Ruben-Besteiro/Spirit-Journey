@@ -53,7 +53,7 @@ public class PlayerModeManager : MonoBehaviour, ISaveable
 
     private void HandleStamina()
     {
-        if (currentRuntimeMode != null)
+        if (currentRuntimeMode != null && !GameManager.Instance.IsPaused)
         {
             if (currentRuntimeMode.IsActive)
             {

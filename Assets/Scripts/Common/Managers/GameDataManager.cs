@@ -29,9 +29,6 @@ public class GameDataManager : MonoBehaviour
 
     private void Update()
     {
-        if (Mouse.current.leftButton.wasPressedThisFrame)
-        {
-            Debug.Log("Click detectado por DebugInput");
-        }
+        
     }
 }

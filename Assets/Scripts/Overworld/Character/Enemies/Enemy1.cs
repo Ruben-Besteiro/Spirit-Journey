@@ -207,7 +207,7 @@ public class Enemy1 : OverworldObject
             GameManager.Instance.kills++;
             GameManager.Instance.killsRemainingText.text = (GameManager.Instance.killsToWin - GameManager.Instance.kills).ToString();
             if (GameManager.Instance.kills >= GameManager.Instance.killsToWin)
-                StartCoroutine(GameManager.Instance.WonOrLost(true));
+                GameManager.Instance.WonOrLost(true);
             Destroy(gameObject);
         }
         else
@@ -226,7 +226,6 @@ public class Enemy1 : OverworldObject
 
                 bloodSplatterDirections.Add(direction);
             }
-            print(bloodSplatters.Count);
             StartCoroutine(IEKnockback(damageDir));
         }
     }

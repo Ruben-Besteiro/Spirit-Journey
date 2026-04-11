@@ -304,7 +304,7 @@ public class PlayerController : OverworldObject
             Vector3 damageDir = (transform.position - damaged.source.transform.position).normalized;
             if (!damaged.source.gameObject.CompareTag("Bullet")) Knockback(damageDir);
 
-            if (currentHP <= 0) StartCoroutine(GameManager.Instance.WonOrLost(false));
+            if (currentHP <= 0) GameManager.Instance.WonOrLost(false);
         }
     }
 
