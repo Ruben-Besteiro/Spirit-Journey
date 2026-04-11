@@ -59,18 +59,16 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        data = TryLoad();
+        /*data = TryLoad();
         saveableObjects = FindAllSaveableObjects();
         foreach (ISaveable obj in saveableObjects)
         {
             obj.LoadData(data);
-        }
+        }*/
 
         timerEnabled = true;        // Esto es obligatorio ponerlo aqu y no arriba porque si no no va
- 
-        timerText = GameObject.Find("Time Text").GetComponent<TextMeshProUGUI>();
+
         timerText.text = maxTime.ToString("F2");
-        killsRemainingText = GameObject.Find("Kills Remaining Text").GetComponent<TextMeshProUGUI>();
         killsRemainingText.text = killsToWin.ToString();
     }
 
@@ -123,7 +121,7 @@ public class GameManager : MonoBehaviour
     }
 
     // Todo esto ahora mismo no se utiliza
-    private List<ISaveable> FindAllSaveableObjects()
+    /*private List<ISaveable> FindAllSaveableObjects()
     {
         var foundSaveableObjects = FindObjectsByType(
             typeof(MonoBehaviour),
@@ -197,7 +195,7 @@ public class GameManager : MonoBehaviour
         }
 
         return loadedData;
-    }
+    }*/
 
     public void WonOrLost(bool won)
     {

@@ -7,7 +7,7 @@ public class Spawner : OverworldObject
     [SerializeField] List<SpawnPhase> phases = new();
     int phaseIndex = 0;
     int enemiesSpawnedThisPhase = 0;
-    [SerializeField] int enemiesPerPhase = 5;       // Ahora mismo todas las fases tienen la misma longitud pero se podría cambiar
+    [SerializeField] int enemiesPerPhase = 5;       // Ahora mismo todas las fases tienen la misma longitud pero se podrï¿½a cambiar
     [SerializeField] PlayerController player;
     float timer = 0;
 
@@ -20,33 +20,30 @@ public class Spawner : OverworldObject
 
     void Update()
     {
-        if (player.currentHP > 0 && !GameManager.Instance.IsPaused)
-        {
-            timer += Time.deltaTime;
+        if (!isPaused) timer += Time.deltaTime;
 
-            if (timer >= currentPhase.startingTime && timer % currentPhase.spawnInterval <= Time.deltaTime)
+        if (!isPaused && timer >= currentPhase.startingTime && timer % currentPhase.spawnInterval <= Time.deltaTime)
+        {
+            if (enemiesSpawnedThisPhase < enemiesPerPhase)
             {
-                if (enemiesSpawnedThisPhase < enemiesPerPhase)
-                {
-                    int spawnPointIndex = Random.Range(0, spawnPoints.Count);
-                    print(spawnPointIndex);
-                    Instantiate(currentPhase.enemyPrefab, spawnPoints[spawnPointIndex].transform.position, Quaternion.identity);
-                    enemiesSpawnedThisPhase++;
-                    if (currentPhase.spawnInterval > currentPhase.minSpawnInterval) currentPhase.spawnInterval -= currentPhase.spawnTimeIncrement;
-                } else
-                {
-                    timer = 0;
-                    phaseIndex = (++phaseIndex) % phases.Count;
-                    currentPhase = phases[phaseIndex];
-                    print("Cambiando a la fase " + phaseIndex + "...");
-                    enemiesSpawnedThisPhase = 0;
-                }
+                int spawnPointIndex = Random.Range(0, spawnPoints.Count);
+                print(spawnPointIndex);
+                Instantiate(currentPhase.enemyPrefab, spawnPoints[spawnPointIndex].transform.position, Quaternion.identity);
+                enemiesSpawnedThisPhase++;
+                if (currentPhase.spawnInterval > currentPhase.minSpawnInterval) currentPhase.spawnInterval -= currentPhase.spawnTimeIncrement;
+            } else
+            {
+                timer = 0;
+                phaseIndex = (++phaseIndex) % phases.Count;
+                currentPhase = phases[phaseIndex];
+                print("Cambiando a la fase " + phaseIndex + "...");
+                enemiesSpawnedThisPhase = 0;
             }
         }
     }
 
 
-    [System.Serializable]       // Poner esto es obligatorio porque si no lo de abajo no aparece para editarlo en ningún sitio
+    [System.Serializable]       // Poner esto es obligatorio porque si no lo de abajo no aparece para editarlo en ningn sitio
     public class SpawnPhase
     {
         [SerializeField] public GameObject enemyPrefab;
