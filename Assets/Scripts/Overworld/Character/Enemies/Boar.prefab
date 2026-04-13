@@ -122,7 +122,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 54567a0c5180b4547aff345f920f72a3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -200,6 +200,9 @@ MonoBehaviour:
   blood: {fileID: 6655036430926017566, guid: f328f2677126e974aa035cf2ab1c277b, type: 3}
   bullet: {fileID: 0}
   damageBox: {fileID: 2598597334535170179}
+  boarMaterial: {fileID: 2100000, guid: 54567a0c5180b4547aff345f920f72a3, type: 2}
+  batMaterial: {fileID: 0}
+  beetleMaterial: {fileID: 0}
   hasTakenDamageThisFrame: 0
 --- !u!54 &487512552319501060
 Rigidbody:

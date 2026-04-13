@@ -34,6 +34,10 @@ public class Enemy1 : OverworldObject
     [SerializeField] public GameObject bullet;     // Prefab de la bala (solo si utiliza)
     [SerializeField] protected BoxCollider damageBox;
 
+    [SerializeField] Material boarMaterial;
+    [SerializeField] Material batMaterial;
+    [SerializeField] Material beetleMaterial;
+
     public bool hasTakenDamageThisFrame = false;
 
     void Awake()
@@ -266,6 +270,18 @@ public class Enemy1 : OverworldObject
                 Destroy(bloodSplatters[i]);
             }
         }
-        GetComponent<Renderer>().material.color = Color.gray;
+
+        switch (gameObject.name)
+        {
+            case ("Boar(Clone)"):
+                GetComponent<Renderer>().material.color = boarMaterial.color;
+                break;
+            case ("Bat(Clone)"):
+                GetComponent<Renderer>().material.color = batMaterial.color;
+                break;
+            case ("Beetle(Clone)"):
+                GetComponent<Renderer>().material.color = beetleMaterial.color;
+                break;
+        }
     }
 }

@@ -50,6 +50,16 @@ public class TitleSceneManager : MonoBehaviour
         GameSceneManager.Instance.LoadScene("MAP_Level", SceneTransition.FadeBlack, false);
     }
 
+    public void GoToUpgrade()
+    {
+        GameSceneManager.Instance.LoadScene("UpgradeScene", SceneTransition.FadeBlack, false);
+    }
+
+    public void GoToOptions()
+    {
+        GameSceneManager.Instance.LoadScene("Options", SceneTransition.FadeBlack, false);
+    }
+
     // Actualizamos el dinero con un delay de 1 frame
     private IEnumerator UpdateMoneyText()
     {
