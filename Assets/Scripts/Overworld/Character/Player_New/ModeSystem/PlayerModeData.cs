@@ -9,6 +9,7 @@ public class PlayerModeData : ScriptableObject
     [Header("Stat Modifiers")]
     public float moveSpeedMultiplier = 1f; // + upgradeData.speedStage * 0.5f;
     public float jumpForceMultiplier = 1f; // + upgradeData.speedStage * 0.5f;
+    public float rangeMultiplier = 1f; // + upgradeData.rangeStage * 0.5f;
     internal float staminaDrainPerSecond = 10f;
 
     [Header("Visual")]

@@ -55,6 +55,6 @@ public class TitleSceneManager : MonoBehaviour
     {
         yield return null;
         moneyText.color = Color.yellow;
-        moneyText.text = GameDataManager.Instance.money.ToString();
+        moneyText.text = GameDataManager.Instance.money.ToString() + " €";
     }
 }

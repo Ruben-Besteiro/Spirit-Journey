@@ -204,7 +204,7 @@ public class GameManager : MonoBehaviour
         wonOrLostText.text = won ? "Has ganado" : "Has perdido";
         wonOrLostText.color = won ? Color.green : Color.red;
         int wonMoney = won ? (int)(remainingTime * 10) : 0;
-        plusMoneyText.text = "+" + wonMoney.ToString();
+        plusMoneyText.text = "+" + wonMoney.ToString() + " €";
         plusMoneyText.color = won ? Color.white : Color.yellow;
         GameDataManager.Instance.money += wonMoney;
         GameSceneManager.Instance.LoadScene("TitleScreen", SceneTransition.FadeBlack, false);

@@ -11,19 +11,20 @@ public class AttackState : PlayerState
     private float boxCastRangeXY = 1.5f;
     private float boxCastOffset = 1;
 
-    public float damage = 1;
+    public float damage;
 
     public AttackState(PlayerStateMachine sm, PlayerController controller)
         : base(sm, controller) { }
 
     public override void Enter()
     {
-        // El jugador pega Èl solo (no hace falta darle al ratÛn)
+        // El jugador pega l solo (no hace falta darle al rat√≥n)
+        damage = controller.GetComponent<PlayerModeManager>().currentRuntimeMode.ModifyDamage(1);
 
         var transformation = controller.GetComponent<PlayerModeManager>().currentRuntimeMode.data;
-        boxCastRangeXY = transformation.boxCastRangeXY;
-        boxCastRangeZ = transformation.boxCastRangeZ;
-        boxCastOffset = transformation.boxCastOffset;
+        boxCastRangeXY = controller.GetComponent<PlayerModeManager>().currentRuntimeMode.ModifyRange(transformation.boxCastRangeXY);
+        boxCastRangeZ = controller.GetComponent<PlayerModeManager>().currentRuntimeMode.ModifyRange(transformation.boxCastRangeZ);
+        boxCastOffset = controller.GetComponent<PlayerModeManager>().currentRuntimeMode.ModifyRange(transformation.boxCastOffset);
 
         controller.AttackPressed = false;
         comboStep = 1;
@@ -35,7 +36,7 @@ public class AttackState : PlayerState
 
         foreach (Collider c in detectedEnemies)
         {
-            if (!c.CompareTag("Enemy") && !c.CompareTag("Bullet")) continue;        // Las balas tambi?n pueden recibir da?o
+            if (!c.CompareTag("Enemy") && !c.CompareTag("Bullet")) continue;        // Las balas tambi√©n pueden recibir da√±o
 
             i = Color.yellow;
 
